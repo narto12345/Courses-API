@@ -1,5 +1,6 @@
 ﻿using Courses_API.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Courses_API.Controllers
 {
@@ -8,27 +9,51 @@ namespace Courses_API.Controllers
 	[Route("/api/users")]
 	public class UserController : ControllerBase
 	{
+		private readonly ApplicationDbContext _contextDb;
+		public UserController(ApplicationDbContext applicationDbContext)
+		{
+			_contextDb = applicationDbContext;
+		}
 
 		[HttpGet]
-		public IEnumerable<User> Get()
+		public async Task<IEnumerable<User>> Get()
 		{
-			return new List<User>()
+			return await _contextDb.Users.ToListAsync();
+		}
+
+		[HttpGet("{id:int}")]
+		public async Task<ActionResult> Get(int id)
+		{
+			User? userFound = await _contextDb.Users.FirstOrDefaultAsync(x => x.Id == id);
+
+			if (userFound is null)
 			{
-				new User
-				{
-					Id = 1,
-					Name = "Nicolas",
-					Lastname = "Sosa",
-					UserName = "nicosan"
-				},
-				new User
-				{
-					Id = 2,
-					Name = "Santiago",
-					Lastname = "Jimenez",
-					UserName = "santi"
-				}
-			};
+				return NotFound();
+			}
+
+			return Ok(userFound);
+		}
+
+		[HttpPost]
+		public async Task<ActionResult> Post([FromBody] User user)
+		{
+			_contextDb.Add(user);
+			await _contextDb.SaveChangesAsync();
+			return Created();
+		}
+
+		[HttpDelete("{id:int}")]
+		public async Task<ActionResult> Delete(int id)
+		{
+			int registersDeleted = await _contextDb.Users.Where(user => user.Id == id)
+														 .ExecuteDeleteAsync();
+
+			if (registersDeleted == 0)
+			{
+				return NotFound();
+			}
+
+			return Ok();
 		}
 	}
 }

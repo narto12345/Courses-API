@@ -31,6 +31,7 @@ namespace Courses_API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateOnly?>("Birthdate")
@@ -39,12 +40,13 @@ namespace Courses_API.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserFk")
+                    b.Property<int?>("UserIdFk")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserFk")
+                    b.HasIndex("UserIdFk")
                         .IsUnique();
 
                     b.ToTable("Details");
@@ -59,7 +61,6 @@ namespace Courses_API.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Lastname")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -79,7 +80,7 @@ namespace Courses_API.Migrations
                 {
                     b.HasOne("Courses_API.Models.User", "User")
                         .WithOne("Detail")
-                        .HasForeignKey("Courses_API.Models.Detail", "UserFk")
+                        .HasForeignKey("Courses_API.Models.Detail", "UserIdFk")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

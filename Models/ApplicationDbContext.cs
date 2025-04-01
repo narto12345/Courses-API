@@ -18,7 +18,7 @@ namespace Courses_API.Models
 			modelBuilder.Entity<User>()
 				.HasOne(u => u.Detail)
 				.WithOne(d => d.User)
-				.HasForeignKey<Detail>(d => d.UserFk);
+				.HasForeignKey<Detail>(d => d.UserIdFk);
 
 			base.OnModelCreating(modelBuilder);
 		}
