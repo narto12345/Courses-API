@@ -1,20 +1,20 @@
 ﻿using AutoMapper;
 using Courses_API.Dtos;
 using Courses_API.Models;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace Courses_API.Controllers
 {
 
 	[ApiController]
 	[Route("/api/details")]
-	public class UserDetailController : ControllerBase
+	public class DetailController : ControllerBase
 	{
 		private readonly ApplicationDbContext _contextDb;
 		private readonly IMapper _mapper;
-		public UserDetailController(ApplicationDbContext applicationDbContext, IMapper mapper)
+		public DetailController(ApplicationDbContext applicationDbContext, IMapper mapper)
 		{
 			_contextDb = applicationDbContext;
 			_mapper = mapper;
@@ -69,6 +69,35 @@ namespace Courses_API.Controllers
 			return CreatedAtRoute("ObtenerDetalleDeUsuario", new { id = detail.Id}, detailDto);
 		}
 
+		[HttpPatch("{id:int}")]
+		public async Task<ActionResult> Patch(int id, JsonPatchDocument<DetailPatchDto> patchDocument)
+		{
+			if (patchDocument is null)
+			{
+				return BadRequest();
+			}
+
+			Detail? detailFound = await _contextDb.Details.FirstOrDefaultAsync(detailFound => detailFound.Id == id);
+
+			if (detailFound == null)
+			{
+				return NotFound();
+			}
+
+			DetailPatchDto detailPatchDtoDb = _mapper.Map<DetailPatchDto>(detailFound);
+			patchDocument.ApplyTo(detailPatchDtoDb, ModelState);
+			bool isValid = TryValidateModel(detailPatchDtoDb);
+
+			if (!isValid)
+			{
+				return ValidationProblem();
+			}
+
+			_mapper.Map(detailPatchDtoDb, detailFound);
+			await _contextDb.SaveChangesAsync();
+			return NoContent();
+		}
+
 		[HttpDelete("{id:int}")]
 		public async Task<ActionResult> Delete(int id)
 		{
@@ -80,7 +109,7 @@ namespace Courses_API.Controllers
 				return NotFound();
 			}
 
-			return Ok();
+			return NoContent();
 		}
 	}
 }
