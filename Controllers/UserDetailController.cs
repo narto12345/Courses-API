@@ -1,6 +1,9 @@
-﻿using Courses_API.Models;
+﻿using AutoMapper;
+using Courses_API.Dtos;
+using Courses_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace Courses_API.Controllers
 {
@@ -10,18 +13,22 @@ namespace Courses_API.Controllers
 	public class UserDetailController : ControllerBase
 	{
 		private readonly ApplicationDbContext _contextDb;
-		public UserDetailController(ApplicationDbContext applicationDbContext)
+		private readonly IMapper _mapper;
+		public UserDetailController(ApplicationDbContext applicationDbContext, IMapper mapper)
 		{
 			_contextDb = applicationDbContext;
+			_mapper = mapper;
 		}
 
 		[HttpGet]
-		public async Task<IEnumerable<Detail>> Get()
+		public async Task<List<DetailDto>> Get()
 		{
-			return await _contextDb.Details.ToListAsync();
+			List<Detail> detailsFoud = await _contextDb.Details.ToListAsync();
+			List<DetailDto> detailsDto = _mapper.Map<List<DetailDto>>(detailsFoud);
+			return detailsDto;
 		}
 
-		[HttpGet("{id:int}")]
+		[HttpGet("{id:int}", Name = "ObtenerDetalleDeUsuario")]
 		public async Task<ActionResult> Get(int id)
 		{
 			Detail? detailFound = await _contextDb.Details.FirstOrDefaultAsync(x => x.Id == id);
@@ -31,7 +38,9 @@ namespace Courses_API.Controllers
 				return NotFound();
 			}
 
-			return Ok(detailFound);
+			DetailDto detailDto = _mapper.Map<DetailDto>(detailFound);
+
+			return Ok(detailDto);
 		}
 
 		[HttpPost]
@@ -44,7 +53,8 @@ namespace Courses_API.Controllers
 				return BadRequest($"El usuario con id '{detail.UserIdFk}' no existe");
 			}
 
-			bool existDetail = await _contextDb.Details.AnyAsync(detail => detail.UserIdFk == detail.UserIdFk);
+			bool existDetail = await _contextDb.Details
+											   .AnyAsync(detailFound => detailFound.UserIdFk == detail.UserIdFk);
 
 			if (existDetail)
 			{
@@ -53,7 +63,10 @@ namespace Courses_API.Controllers
 
 			_contextDb.Add(detail);
 			await _contextDb.SaveChangesAsync();
-			return Created();
+
+			DetailDto detailDto = _mapper.Map<DetailDto>(detail);
+
+			return CreatedAtRoute("ObtenerDetalleDeUsuario", new { id = detail.Id}, detailDto);
 		}
 
 		[HttpDelete("{id:int}")]

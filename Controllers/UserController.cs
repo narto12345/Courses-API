@@ -1,4 +1,6 @@
-﻿using Courses_API.Models;
+﻿using AutoMapper;
+using Courses_API.Dtos;
+using Courses_API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,18 +12,22 @@ namespace Courses_API.Controllers
 	public class UserController : ControllerBase
 	{
 		private readonly ApplicationDbContext _contextDb;
-		public UserController(ApplicationDbContext applicationDbContext)
+		private readonly IMapper _mapper;
+		public UserController(ApplicationDbContext applicationDbContext, IMapper  mapper)
 		{
 			_contextDb = applicationDbContext;
+			_mapper = mapper;
 		}
 
 		[HttpGet]
-		public async Task<IEnumerable<User>> Get()
+		public async Task<IEnumerable<UserDto>> Get()
 		{
-			return await _contextDb.Users.ToListAsync();
+			List<User> users = await _contextDb.Users.ToListAsync();
+			List<UserDto> usersDto = _mapper.Map<List<UserDto>>(users);
+			return usersDto;
 		}
 
-		[HttpGet("{id:int}")]
+		[HttpGet("{id:int}", Name = "ObtenerUsuario")]
 		public async Task<ActionResult> Get(int id)
 		{
 			User? userFound = await _contextDb.Users.FirstOrDefaultAsync(x => x.Id == id);
@@ -31,7 +37,9 @@ namespace Courses_API.Controllers
 				return NotFound();
 			}
 
-			return Ok(userFound);
+			UserDto userDto = _mapper.Map<UserDto>(userFound);
+
+			return Ok(userDto);
 		}
 
 		[HttpPost]
@@ -39,7 +47,10 @@ namespace Courses_API.Controllers
 		{
 			_contextDb.Add(user);
 			await _contextDb.SaveChangesAsync();
-			return Created();
+
+			UserDto userDto = _mapper.Map<UserDto>(user);
+
+			return CreatedAtRoute("ObtenerUsuario", new { id = user.Id }, userDto);
 		}
 
 		[HttpDelete("{id:int}")]
