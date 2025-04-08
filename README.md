@@ -7,7 +7,7 @@
 
 ## Introducción
 Courses-API es una aplicación backend que se encarga de gestionar un sistema
-integral de cursos, esta permite realizar diversas opraciones como:
+integral de cursos, esta permite realizar diversas operaciones como:
 
 - Crear un curso.
 - Añadir lecciones al curso.
