@@ -4,6 +4,8 @@
 
 1. [Introducción](#introducción)
 2. [Modelo de datos](#modelo-de-datos)
+3. [¿Cómo levantar el proyecto?](#cómo-levantar-el-proyecto)
+4. [Modelo de datos](#servicos-web)
 
 ## Introducción
 
@@ -68,13 +70,13 @@ entidades del modelo de datos:
 
 #### 1.1 Obtener todos los usaurios
 
-- Endpoint
+- **Endpoint**
 
 ```
 GET https://localhost:7081/api/users
 ```
 
-- Respuesta exitosa (Ejemplo)
+- **Respuesta exitosa (Ejemplo)**
 
 ```json
 [
@@ -107,3 +109,51 @@ GET https://localhost:7081/api/users
 | detail.email     | text   | Dirreción de correo electrónico del detalle del usuario |
 | detail.address   | text   | Dirreción de física electronico del detalle del usuario |
 | detail.birthdate | date   | Fecha de nacimiento en formato `yyyy-mm-dd`             |
+
+#### 1.2 Obtener usaurio por id
+
+- **Endpoint**
+
+```
+GET https://localhost:7081/api/users/{userId}
+```
+
+- **Path Params**
+
+| Parámetro | Tipo   | Descripción               | Obligatorio |
+| --------- | ------ | ------------------------- | ----------- |
+| userId    | number | Identificador del usuario | Si          |
+
+- **Respuesta exitosa (Ejemplo)**
+
+```json
+{
+  "id": 4,
+  "userName": "varesGamerYT",
+  "fullName": "Duvan Vargas",
+  "detail": {
+    "id": 5,
+    "email": "vares_gamer@hotmail.com",
+    "address": "calle 80",
+    "birthdate": "1999-10-13"
+  }
+}
+```
+
+| Atributo         | Tipo   | Descripción                                             |
+| ---------------- | ------ | ------------------------------------------------------- |
+| id               | number | Identificador único del usuario                         |
+| userName         | text   | Nombre de usuario                                       |
+| fullName         | text   | Nombre completo real del usuario                        |
+| detail.id        | number | Identificador único del detalle del usuario             |
+| detail.email     | text   | Dirreción de correo electrónico del detalle del usuario |
+| detail.address   | text   | Dirreción de física electronico del detalle del usuario |
+| detail.birthdate | date   | Fecha de nacimiento en formato `yyyy-mm-dd`             |
+
+#### 1.3 Crear usuario
+
+- **Endpoint**
+
+```
+GET https://localhost:7081/api/users
+```
