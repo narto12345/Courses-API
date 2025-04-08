@@ -2,8 +2,8 @@
 
 ## Tabla de Contenido
 
-1. [Introducción](##introducción)
-2. [Modelo de datos](##modelo-de-datos)
+1. [Introducción](#introducción)
+2. [Modelo de datos](#modelo-de-datos)
 
 ## Introducción
 
