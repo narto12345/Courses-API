@@ -76,7 +76,7 @@ entidades del modelo de datos:
 GET https://localhost:7081/api/users
 ```
 
-- **Respuesta exitosa (Ejemplo)**
+- **Respuesta exitosa (Ejemplo) 200 Ok**
 
 ```json
 [
@@ -124,7 +124,7 @@ GET https://localhost:7081/api/users/{userId}
 | --------- | ------ | ------------------------- | ----------- |
 | userId    | number | Identificador del usuario | Si          |
 
-- **Respuesta exitosa (Ejemplo)**
+- **Respuesta exitosa (Ejemplo) 200 Ok**
 
 ```json
 {
@@ -155,5 +155,39 @@ GET https://localhost:7081/api/users/{userId}
 - **Endpoint**
 
 ```
-GET https://localhost:7081/api/users
+POST https://localhost:7081/api/users
 ```
+
+- **Request Body**
+
+```json
+{
+  "username": "narto",
+  "name": "Nicolas",
+  "lastname": "Sosa"
+}
+```
+
+| Parámetro | Tipo | Descripción             | Obligatorio |
+| --------- | ---- | ----------------------- | ----------- |
+| username  | text | Nombre de usuario       | Si          |
+| name      | text | Nombre real del usuario | Si          |
+| lastname  | text | Apellido del usuario    | No          |
+
+- **Respuesta exitosa (Ejemplo) 201 Created**
+
+```json
+{
+  "id": 1004,
+  "userName": "narto",
+  "fullName": "Nicolas Sosa",
+  "detail": null
+}
+```
+
+| Atributo | Tipo   | Descripción                                                                                                                       |
+| -------- | ------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| id       | number | Identificador único del usuario                                                                                                   |
+| userName | text   | Nombre de usuario                                                                                                                 |
+| fullName | text   | Nombre completo real del usuario                                                                                                  |
+| detail   | object | objeto relacionado al detalle del usuario (Por defecto cuando creamos un usario este valor será nulo, ya que se crea sin detalle) |
