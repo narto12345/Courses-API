@@ -2,11 +2,10 @@
 
 ## Tabla de Contenido
 
-- [Introducción](#introducción)
-- [Modelo relacional](#modelo-relacional)
-   - [Explicación de entidades y sus relaciones](#explicación-de-entidades-y-sus-relaciones)
+1. [Introducción](#introducción)
+2. [Modelo de datos](#modelo-de-datos)
 
-## Introducción
+## 1. Introducción
 
 Courses-API es una aplicación backend que se encarga de gestionar un sistema
 integral de cursos, esta permite realizar diversas operaciones como:
@@ -24,7 +23,7 @@ A continuación, encontrará una explicación detallada de sus diversos apartado
 tanto funcionales como técnicos.
 
 
-## Modelo Relacional
+## 2. Modelo de datos
 
 Como podemos apreciar el siguiente diagrama ilustra la relación entre las diferentes
 entidades del modelo de datos:
@@ -51,7 +50,7 @@ entidades del modelo de datos:
   lecciones y a su vez una lección solo puede estar relacionada a un único curso.
 
 - **User N:N Course (Relación de muchos a muchos):**  Un usuario puede estar relacionado a uno o
-  más cursos, y de la misma manera un curso puede estar relacionado a uno a más usuarios. Esta relación
-  de muchos a muchos requiere de una tabla intermediria que se encargue de alojar las multiples relaciones,
+  más cursos, y de la misma manera un curso puede estar relacionado a uno o más usuarios. Esta relación
+  de muchos a muchos requiere de una tabla intermediaria que se encargue de alojar las multiples relaciones,
   esta la tabla es Registration o en español Inscripción.
   
