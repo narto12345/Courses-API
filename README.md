@@ -2,10 +2,10 @@
 
 ## Tabla de Contenido
 
-1. [Introducción](#1.-introducción)
-2. [Modelo de datos](#2.-modelo-de-datos)
+1. [Introducción](##introducción)
+2. [Modelo de datos](##modelo-de-datos)
 
-## 1. Introducción
+## Introducción
 
 Courses-API es una aplicación backend que se encarga de gestionar un sistema
 integral de cursos, esta permite realizar diversas operaciones como:
@@ -23,7 +23,7 @@ A continuación, encontrará una explicación detallada de sus diversos apartado
 tanto funcionales como técnicos.
 
 
-## 2. Modelo de datos
+## Modelo de datos
 
 Como podemos apreciar el siguiente diagrama ilustra la relación entre las diferentes
 entidades del modelo de datos:
