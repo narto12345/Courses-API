@@ -2,11 +2,11 @@
 
 ## Tabla de Contenido
 
-- [1. Introducción](#introduccion)
-- [2. Modelo relacional](#modelo-relacional)
-- [2.1 Explicación de entidades y sus relaciones](##explicacion-de-entidades-y-sus-relaciones)
+- [Introducción](#introduccion)
+- [Modelo relacional](#modelo-relacional)
+   - [Explicación de entidades y sus relaciones](##explicacion-de-entidades-y-sus-relaciones)
 
-## 1. Introducción
+## Introducción
 
 Courses-API es una aplicación backend que se encarga de gestionar un sistema
 integral de cursos, esta permite realizar diversas operaciones como:
@@ -24,7 +24,7 @@ A continuación, encontrará una explicación detallada de sus diversos apartado
 tanto funcionales como técnicos.
 
 
-## 2. Modelo Relacional
+## Modelo Relacional
 
 Como podemos apreciar el siguiente diagrama ilustra la relación entre las diferentes
 entidades del modelo de datos:
@@ -32,7 +32,7 @@ entidades del modelo de datos:
 
 ![Modelo relacional de la base de datos](./Public/RelationModel.drawio.svg)
 
-### 2.1 Explicación de entidades y sus relaciones
+### Explicación de entidades y sus relaciones
 
 ### Entidades
 
