@@ -238,3 +238,113 @@ POST https://localhost:7081/api/users/{userId}
 - **Respuesta exitosa (Ejemplo) 204 No Content**
 
 Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
+
+### 2. Detail
+
+#### 2.1 Obtener todos los detalles
+
+- **Endpoint**
+
+GET https://localhost:7081/api/details
+
+- **Respuesta exitosa (Ejemplo) 200 Ok**
+
+```json
+[
+  {
+    "id": 5,
+    "email": "vares_gamer@hotmail.com",
+    "address": "calle 80",
+    "birthdate": "1999-10-13"
+  },
+  {
+    "id": 1002,
+    "email": "biron@email.com",
+    "address": "calle 80",
+    "birthdate": "2000-02-02"
+  }
+]
+```
+
+| Atributo  | Tipo   | Descripción                                 |
+| --------- | ------ | ------------------------------------------- |
+| id        | number | Identificador único del detalle del usuario |
+| email     | text   | Dirreción de correo electrónico             |
+| address   | text   | Dirreción física                            |
+| birthdate | date   | Fecha de nacimiento en formato `yyyy-mm-dd` |
+
+#### 2.2 Obtener detalle por id
+
+- **Endpoint**
+
+```
+GET https://localhost:7081/api/details/{detailId}
+```
+
+- **Path Params**
+
+| Parámetro | Tipo   | Descripción                                         | Obligatorio |
+| --------- | ------ | --------------------------------------------------- | ----------- |
+| detailId  | number | Identificador único del detalle del usuario usuario | Si          |
+
+- **Respuesta exitosa (Ejemplo) 200 Ok**
+
+```json
+{
+  "id": 5,
+  "email": "vares_gamer@hotmail.com",
+  "address": "calle 80",
+  "birthdate": "1999-10-13"
+}
+```
+
+| Atributo  | Tipo   | Descripción                                 |
+| --------- | ------ | ------------------------------------------- |
+| id        | number | Identificador único del detalle del usuario |
+| email     | text   | Dirreción de correo electrónico             |
+| address   | text   | Dirreción física                            |
+| birthdate | date   | Fecha de nacimiento en formato `yyyy-mm-dd` |
+
+#### 1.3 Crear detalle a un usuario
+
+- **Endpoint**
+
+```
+POST https://localhost:7081/api/details
+```
+
+- **Request Body**
+
+```json
+{
+  "email": "biron@email.com",
+  "address": "calle 80",
+  "birthdate": "2000-02-02",
+  "UserIdFk": 3
+}
+```
+
+| Parámetro | Tipo   | Descripción                                                         | Obligatorio |
+| --------- | ------ | ------------------------------------------------------------------- | ----------- |
+| email     | text   | Dirreción de correo electrónico                                     | No          |
+| address   | text   | Dirreción física                                                    | Si          |
+| birthdate | date   | Fecha de nacimiento en formato `yyyy-mm-dd`                         | No          |
+| UserIdFk  | number | Clave foránea que indica a qué usuario va a pertenecer este detalle | Si          |
+
+- **Respuesta exitosa (Ejemplo) 201 Created**
+
+```json
+{
+  "id": 1003,
+  "email": "biron@email.com",
+  "address": "calle 80",
+  "birthdate": "2000-02-02"
+}
+```
+
+| Atributo  | Tipo   | Descripción                                 |
+| --------- | ------ | ------------------------------------------- |
+| id        | number | Identificador único del detalle del usuario |
+| email     | text   | Dirreción de correo electrónico             |
+| address   | text   | Dirreción física                            |
+| birthdate | date   | Fecha de nacimiento en formato `yyyy-mm-dd` |
