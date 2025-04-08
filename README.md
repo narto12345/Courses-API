@@ -1,25 +1,25 @@
 # Courses-API
 
 ## Tabla de Contenido
-- [IntroducciÛn](#introduccion)
+- [Introducci√≥n](#introducci√≥n)
 - [Modelo relacional](#modelo-relacional)
 
 
-## IntroducciÛn
-Courses-API es una aplicaciÛn backend que se encarga de gestionar un sistema
+## Introducci√≥n
+Courses-API es una aplicaci√≥n backend que se encarga de gestionar un sistema
 integral de cursos, esta permite realizar diversas operaciones como:
 
 - Crear un curso.
-- AÒadir lecciones al curso.
+- A√±adir lecciones al curso.
 - Crear usuarios.
 - Registrar usuarios a los cursos.
 - Entre otras.
 
-Este proyecto est· elaborado con .Net 8 LTS, est· compuesto por un API REST contruida
+Este proyecto est√° elaborado con .Net 8 LTS, est√° compuesto por un API REST contruida
 sobre ASP.NET Core y Entity Framework que se conecta a una base de datos Microsoft SQL Server.
 
-A continuaciÛn, encontrar· una explicaciÛn detallada de sus diversos apartados
-tanto funcionales como tÈcnicos.
+A continuaci√≥n, encontrar√° una explicaci√≥n detallada de sus diversos apartados
+tanto funcionales como t√©cnicos.
 
 
 ## Modelo Relacional
