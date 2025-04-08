@@ -2,7 +2,7 @@
 
 ## Tabla de Contenido
 
-- [1. Introducción](#introduccion)
+- [1. Introducción](#1.-introduccion)
 - [2. Modelo relacional](#modelo-relacional)
 - [2.1 Explicación de entidades y sus relaciones](##explicacion-de-entidades-y-sus-relaciones)
 
