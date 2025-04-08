@@ -22,12 +22,10 @@ sobre ASP.NET Core y Entity Framework que se conecta a una base de datos Microso
 A continuación, encontrará una explicación detallada de sus diversos apartados
 tanto funcionales como técnicos.
 
-
 ## Modelo de datos
 
 Como podemos apreciar el siguiente diagrama ilustra la relación entre las diferentes
 entidades del modelo de datos:
-
 
 ![Modelo relacional de la base de datos](./Public/RelationModel.drawio.svg)
 
@@ -49,7 +47,7 @@ entidades del modelo de datos:
 - **Course 1:N Lesson (Relación de uno a muchos):** Un curso puede tener asociado una o más
   lecciones y a su vez una lección solo puede estar relacionada a un único curso.
 
-- **User N:N Course (Relación de muchos a muchos):**  Un usuario puede estar relacionado a uno o
+- **User N:N Course (Relación de muchos a muchos):** Un usuario puede estar relacionado a uno o
   más cursos, y de la misma manera un curso puede estar relacionado a uno o más usuarios. Esta relación
   de muchos a muchos requiere de una tabla intermediaria que se encargue de alojar las multiples relaciones,
   esta la tabla es Registration o en español Inscripción.
@@ -66,3 +64,46 @@ entidades del modelo de datos:
 
 ## Servicos Web
 
+### 1. User
+
+#### 1.1 Obtener todos los usaurios
+
+- Endpoint
+
+```
+GET https://localhost:7081/api/users
+```
+
+- Respuesta exitosa (Ejemplo)
+
+```json
+[
+  {
+    "id": 3,
+    "userName": "bironWow",
+    "fullName": "Byron Vergara",
+    "detail": null
+  },
+  {
+    "id": 4,
+    "userName": "varesGamerYT",
+    "fullName": "Duvan Vargas",
+    "detail": {
+      "id": 5,
+      "email": "vares_gamer@hotmail.com",
+      "address": "calle 80",
+      "birthdate": "1999-10-13"
+    }
+  }
+]
+```
+
+| Atributo         | Tipo   | Descripción                                             |
+| ---------------- | ------ | ------------------------------------------------------- |
+| id               | number | Identificador único del usuario                         |
+| userName         | text   | Nombre de usuario                                       |
+| fullName         | text   | Nombre completo real del usuario                        |
+| detail.id        | number | Identificador único del detalle del usuario             |
+| detail.email     | text   | Dirreción de correo electrónico del detalle del usuario |
+| detail.address   | text   | Dirreción de física electronico del detalle del usuario |
+| detail.birthdate | date   | Fecha de nacimiento en formato `yyyy-mm-dd`             |
