@@ -53,4 +53,16 @@ entidades del modelo de datos:
   más cursos, y de la misma manera un curso puede estar relacionado a uno o más usuarios. Esta relación
   de muchos a muchos requiere de una tabla intermediaria que se encargue de alojar las multiples relaciones,
   esta la tabla es Registration o en español Inscripción.
-  
+
+## ¿Cómo levantar el proyecto?
+
+### Requisitos
+
+- .Net 8
+- ASP.NET Core 8
+- Contar con una instancia local de un servidor de base de datos Microsft SQL Server
+- Un Administrador para la base de datos de SQL Server (Esto es opcional, pero esta herramienta facilita el manejo de la base da datos, para esta explicación se usará Microsoft SQL Server Management Studio)
+- Visual Studio o Visual Studio Code (Para esta explicación se usará Visual Studio)
+
+## Servicos Web
+
