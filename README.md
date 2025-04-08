@@ -2,10 +2,26 @@
 
 ## Tabla de Contenido
 
-1. [Introducción](#introducción)
-2. [Modelo de datos](#modelo-de-datos)
-3. [¿Cómo levantar el proyecto?](#cómo-levantar-el-proyecto)
-4. [Modelo de datos](#servicos-web)
+- [Introducción](#introducción)
+- [Modelo de datos](#modelo-de-datos)
+  - [Explicación de entidades y sus relaciones](#explicación-de-entidades-y-sus-relaciones)
+  - [Entidades](#entidades)
+  - [Explicación](#explicación)
+- [¿Cómo levantar el proyecto?](#cómo-levantar-el-proyecto)
+  - [Requisitos](#requisitos)
+- [Servicios Web](#servicios-web)
+  - [1. User](#1-user)
+    - [1.1 Obtener todos los usuarios](#11-obtener-todos-los-usaurios)
+    - [1.2 Obtener usuario por id](#12-obtener-usaurio-por-id)
+    - [1.3 Crear usuario](#13-crear-usuario)
+    - [1.4 Actualizar usuario](#14-actualizar-usuario)
+    - [1.5 Eliminar usuario](#15-eliminar-usuario)
+  - [2. Detail](#2-detail)
+    - [2.1 Obtener todos los detalles](#21-obtener-todos-los-detalles)
+    - [2.2 Obtener detalle por id](#22-obtener-detalle-por-id)
+    - [2.3 Crear un detalle a un usuario](#23-crear-un-detalle-a-un-usuario)
+    - [2.4 Actualizar un detalle de un usuario](#24-actualizar-un-detalle-de-un-usuario)
+    - [2.5 Eliminar un detalle de un usuario](#25-eliminar-un-detalle-de-un-usuario)
 
 ## Introducción
 
@@ -226,7 +242,7 @@ Cuando la moficiación se haya ejecutado satifactoriamente el sistema no devolve
 - **Endpoint**
 
 ```
-POST https://localhost:7081/api/users/{userId}
+DELETE https://localhost:7081/api/users/{userId}
 ```
 
 - **Path Params**
@@ -305,7 +321,7 @@ GET https://localhost:7081/api/details/{detailId}
 | address   | text   | Dirreción física                            |
 | birthdate | date   | Fecha de nacimiento en formato `yyyy-mm-dd` |
 
-#### 1.3 Crear detalle a un usuario
+#### 2.3 Crear un detalle a un usuario
 
 - **Endpoint**
 
@@ -348,3 +364,53 @@ POST https://localhost:7081/api/details
 | email     | text   | Dirreción de correo electrónico             |
 | address   | text   | Dirreción física                            |
 | birthdate | date   | Fecha de nacimiento en formato `yyyy-mm-dd` |
+
+#### 2.4 Actualizar un detalle de un usuario
+
+Este servicio utiliza el estandar **RFC 6902** o también conocido como JSON Patch, que basicamente nos indica cómo debe ser la estructura del cuerpo
+de la petición HTTP que va a indicar los cambios que deseamos hacer sobre una entidad, ejemplo:
+
+```json
+[
+  { "op": "replace", "path": "/lastname", "value": "Gomez" },
+  { "op": "replace", "path": "/name", "value": "Duvan" }
+]
+```
+
+Como puede observar el servicio requiere un de arreglo donde especifiquemos los cambios en las propiedades que se deeen realizar modificaciones, por lo tanto
+no es necesario especificar todos los atributos de la entidad.
+
+```
+PATCH https://localhost:7081/api/details/{detailId}
+```
+
+- **Request Body**
+
+```json
+[
+  { "op": "replace", "path": "/address", "value": "nueva dirección" },
+  { "op": "replace", "path": "/email", "value": "nuevo@correo.com" }
+]
+```
+
+- **Respuesta exitosa (Ejemplo) 204 No Content**
+
+Cuando la moficiación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
+
+#### 2.5 Eliminar un detalle de un usuario
+
+- **Endpoint**
+
+```
+DELETE https://localhost:7081/api/details/{detailId}
+```
+
+- **Path Params**
+
+| Parámetro | Tipo   | Descripción                                 | Obligatorio |
+| --------- | ------ | ------------------------------------------- | ----------- |
+| detailId  | number | Identificador único del detalle del usuario | Si          |
+
+- **Respuesta exitosa (Ejemplo) 204 No Content**
+
+Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
