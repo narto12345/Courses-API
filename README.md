@@ -120,9 +120,9 @@ GET https://localhost:7081/api/users/{userId}
 
 - **Path Params**
 
-| Parámetro | Tipo   | Descripción               | Obligatorio |
-| --------- | ------ | ------------------------- | ----------- |
-| userId    | number | Identificador del usuario | Si          |
+| Parámetro | Tipo   | Descripción                     | Obligatorio |
+| --------- | ------ | ------------------------------- | ----------- |
+| userId    | number | Identificador único del usuario | Si          |
 
 - **Respuesta exitosa (Ejemplo) 200 Ok**
 
@@ -191,3 +191,50 @@ POST https://localhost:7081/api/users
 | userName | text   | Nombre de usuario                                                                                                                 |
 | fullName | text   | Nombre completo real del usuario                                                                                                  |
 | detail   | object | objeto relacionado al detalle del usuario (Por defecto cuando creamos un usario este valor será nulo, ya que se crea sin detalle) |
+
+#### 1.4 Actualizar usuario
+
+Este servicio utiliza el estandar **RFC 6902** o también conocido como JSON Patch, que basicamente nos indica cómo debe ser la estructura del cuerpo
+de la petición HTTP que va a indicar los cambios que deseamos hacer sobre una entidad, ejemplo:
+
+```json
+[
+  { "op": "replace", "path": "/lastname", "value": "Gomez" },
+  { "op": "replace", "path": "/name", "value": "Duvan" }
+]
+```
+
+Como puede observar el servicio requiere un de arreglo donde especifiquemos los cambios en las propiedades que se deeen realizar modificaciones, por lo tanto
+no es necesario especificar todos los atributos de la entidad.
+
+```
+PATCH https://localhost:7081/api/users{userId}
+```
+
+- **Request Body**
+
+```json
+[{ "op": "replace", "path": "/userName", "value": "BironTaslima" }]
+```
+
+- **Respuesta exitosa (Ejemplo) 204 No Content**
+
+Cuando la moficiación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
+
+#### 1.5 Eliminar usuario
+
+- **Endpoint**
+
+```
+POST https://localhost:7081/api/users/{userId}
+```
+
+- **Path Params**
+
+| Parámetro | Tipo   | Descripción                     | Obligatorio |
+| --------- | ------ | ------------------------------- | ----------- |
+| userId    | number | Identificador único del usuario | Si          |
+
+- **Respuesta exitosa (Ejemplo) 204 No Content**
+
+Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
