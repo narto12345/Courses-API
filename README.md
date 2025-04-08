@@ -4,7 +4,7 @@
 
 - [Introducción](#introducción)
 - [Modelo relacional](#modelo-relacional)
-   - [Explicación de entidades y sus relaciones](##explicación-de-entidades-y-sus-relaciones)
+   - [Explicación de entidades y sus relaciones](#explicación-de-entidades-y-sus-relaciones)
 
 ## Introducción
 
