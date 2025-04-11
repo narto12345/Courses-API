@@ -11,9 +11,11 @@ namespace Courses_API.Utilities
 			CreateMap<User, UserDto>()
 				.ForMember(dto => dto.FullName,
 						   config => config.MapFrom(user => $"{user.Name} {user.Lastname}"));
+			CreateMap<UserRequestDto, User>();
 			CreateMap<User, UserPatchDto>().ReverseMap();
 
 			CreateMap<Detail, DetailDto>();
+			CreateMap<DetailRequestDto, Detail>();
 			CreateMap<Detail, DetailPatchDto>().ReverseMap();
 		}
 	}

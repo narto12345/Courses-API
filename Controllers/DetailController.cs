@@ -44,22 +44,23 @@ namespace Courses_API.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> Post([FromBody] Detail detail)
+		public async Task<ActionResult> Post([FromBody] DetailRequestDto detailRequestDto)
 		{
-			bool existUser = await _contextDb.Users.AnyAsync(user => user.Id  == detail.UserIdFk);
+			bool existUser = await _contextDb.Users.AnyAsync(user => user.Id  == detailRequestDto.UserIdFk);
 
 			if (!existUser)
 			{
-				return BadRequest($"El usuario con id '{detail.UserIdFk}' no existe");
+				return BadRequest($"El usuario con id '{detailRequestDto.UserIdFk}' no existe");
 			}
 
-			bool existDetail = await _contextDb.Details
-											   .AnyAsync(detailFound => detailFound.UserIdFk == detail.UserIdFk);
+			bool existDetail = await _contextDb.Details.AnyAsync(detailFound => detailFound.UserIdFk == detailRequestDto.UserIdFk);
 
 			if (existDetail)
 			{
-				return BadRequest($"El usuario con id '{detail.UserIdFk}' ya tiene un detalle creado");
+				return BadRequest($"El usuario con id '{detailRequestDto.UserIdFk}' ya tiene un detalle creado");
 			}
+
+			Detail detail = _mapper.Map<Detail>(detailRequestDto);
 
 			_contextDb.Add(detail);
 			await _contextDb.SaveChangesAsync();

@@ -49,8 +49,10 @@ namespace Courses_API.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> Post([FromBody] User user)
+		public async Task<ActionResult> Post([FromBody] UserRequestDto userRequestDto)
 		{
+			User user = _mapper.Map<User>(userRequestDto);
+
 			_contextDb.Add(user);
 			await _contextDb.SaveChangesAsync();
 
