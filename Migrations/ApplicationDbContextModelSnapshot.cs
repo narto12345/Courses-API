@@ -22,6 +22,30 @@ namespace Courses_API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Courses_API.Models.Course", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Courses");
+                });
+
             modelBuilder.Entity("Courses_API.Models.Detail", b =>
                 {
                     b.Property<int>("Id")
@@ -50,6 +74,35 @@ namespace Courses_API.Migrations
                         .IsUnique();
 
                     b.ToTable("Details");
+                });
+
+            modelBuilder.Entity("Courses_API.Models.Lesson", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Hours")
+                        .HasColumnType("int");
+
+                    b.Property<string>("InstructorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("Lessons");
                 });
 
             modelBuilder.Entity("Courses_API.Models.User", b =>
@@ -85,6 +138,22 @@ namespace Courses_API.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Courses_API.Models.Lesson", b =>
+                {
+                    b.HasOne("Courses_API.Models.Course", "Course")
+                        .WithMany("Lessons")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("Courses_API.Models.Course", b =>
+                {
+                    b.Navigation("Lessons");
                 });
 
             modelBuilder.Entity("Courses_API.Models.User", b =>

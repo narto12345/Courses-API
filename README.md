@@ -80,6 +80,25 @@ entidades del modelo de datos:
 - Un Administrador para la base de datos de SQL Server (Esto es opcional, pero esta herramienta facilita el manejo de la base da datos, para esta explicación se usará Microsoft SQL Server Management Studio)
 - Visual Studio o Visual Studio Code (Para esta explicación se usará Visual Studio)
 
+### Migración de base de datos
+
+Los siguiente comandos son utilizados para realizar una migración Code First, que consiste en que a partir de un modelo de datos representado por clases de C#,
+se construyan las tablas en el motor de bases de datos configurado:
+
+Nota: Estos comandos aplican unicamente para la Package Manager Console de Visual Studio.
+
+- **Crear migración**
+
+```
+Add-Migration **Nombre de la migración**
+```
+
+- **Implementar migración en la base de datos**
+
+```
+Update-Database
+```
+
 ## Servicos Web
 
 ### 1. User

@@ -1,3 +1,5 @@
+-- CREATE DATABASE CoursesApiDb;
+
 USE CoursesApiDb;
 
 SELECT * FROM Users;
@@ -9,6 +11,10 @@ SELECT * FROM Users;
 
 SELECT * FROM Details;
 
--- INSERT INTO Details(Email,Address,Birthdate,UserFk) VALUES ('nicosan12@hotmail.com', 'Calle 100 b 30-34', '2000-02-18', 5);
+-- INSERT INTO Details(Email,Address,Birthdate,UserIdFk) VALUES ('nicosan12@hotmail.com', 'Calle 100 b 30-34', '2000-02-18', 1);
 
 -- DELETE FROM Details;
+
+SELECT * FROM Courses;
+
+SELECT * FROM Lessons;

@@ -12,6 +12,21 @@ namespace Courses_API.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Courses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Courses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -24,6 +39,28 @@ namespace Courses_API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Lessons",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InstructorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Hours = table.Column<int>(type: "int", nullable: false),
+                    CourseId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lessons", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Lessons_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -53,6 +90,11 @@ namespace Courses_API.Migrations
                 table: "Details",
                 column: "UserIdFk",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Lessons_CourseId",
+                table: "Lessons",
+                column: "CourseId");
         }
 
         /// <inheritdoc />
@@ -62,7 +104,13 @@ namespace Courses_API.Migrations
                 name: "Details");
 
             migrationBuilder.DropTable(
+                name: "Lessons");
+
+            migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Courses");
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 namespace Courses_API.Models
 {
@@ -11,6 +10,8 @@ namespace Courses_API.Models
 
 		public DbSet<User> Users { get; set; }
 		public DbSet<Detail> Details { get; set; }
+		public DbSet<Course> Courses { get; set; }
+		public DbSet<Lesson> Lessons { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
