@@ -17,6 +17,11 @@ namespace Courses_API.Utilities
 			CreateMap<Detail, DetailDto>();
 			CreateMap<DetailRequestDto, Detail>();
 			CreateMap<Detail, DetailPatchDto>().ReverseMap();
+
+			CreateMap<Course, CourseDto>();
+			CreateMap<Lesson, LessonDto>()
+				.ForMember(dto => dto.CourseCode,
+						   config => config.MapFrom(lesson => lesson.Course == null ? null : lesson.Course.Code));
 		}
 	}
 }
