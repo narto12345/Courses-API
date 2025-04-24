@@ -19,6 +19,8 @@ namespace Courses_API.Utilities
 			CreateMap<Detail, DetailPatchDto>().ReverseMap();
 
 			CreateMap<Course, CourseDto>();
+			CreateMap<CourseRequestDto, Course>();
+			CreateMap<Course, CoursePathDto>().ReverseMap();
 			CreateMap<Lesson, LessonDto>()
 				.ForMember(dto => dto.CourseCode,
 						   config => config.MapFrom(lesson => lesson.Course == null ? null : lesson.Course.Code));
