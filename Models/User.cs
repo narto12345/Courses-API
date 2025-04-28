@@ -9,8 +9,8 @@ namespace Courses_API.Models
 		public string? UserName { get; set; }
 		[Required]
 		public string? Name { get; set; }
-		
 		public string? Lastname { get; set; }
 		public Detail? Detail { get; set; }
+		public List<UserCourse> Courses { get; set; } = [];
 	}
 }

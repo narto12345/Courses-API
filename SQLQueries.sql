@@ -6,6 +6,7 @@ SELECT * FROM Users;
 
 -- INSERT INTO Users(UserName,Name,Lastname) VALUES ('narto','Santiago','Jimenez');
 -- INSERT INTO Users(UserName,Name,Lastname) VALUES ('nicosan','Nicolas','Sosa');
+-- INSERT INTO Users(UserName,Name,Lastname) VALUES ('chipichipi','Angie','Zárate');
 
 -- DELETE FROM Users;
 
@@ -30,3 +31,11 @@ SELECT * FROM Lessons;
 														 ('Java Swing', 'Duvan Vargas', 120, 1),
 														 ('Sintaxis básica C#', 'Sergio Blanco', 15, 7),
 														 ('Programación POO', 'Byron Vergara', 45, 7);*/
+
+SELECT * FROM UsersCourses;
+
+-- DELETE FROM UsersCourses;
+
+/*INSERT INTO UsersCourses(UserId, CourseId) VALUES
+											(3,1),
+											(1,7);*/

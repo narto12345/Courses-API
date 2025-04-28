@@ -12,6 +12,7 @@ namespace Courses_API.Models
 		public DbSet<Detail> Details { get; set; }
 		public DbSet<Course> Courses { get; set; }
 		public DbSet<Lesson> Lessons { get; set; }
+		public DbSet<UserCourse> UsersCourses { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
