@@ -90,7 +90,6 @@ namespace Courses_API.Controllers
 			return CreatedAtRoute("ObtenerCurso", new { id = course.Id}, courseDto);
 		}
 
-		// TODO: Validar que no exista con antelacion la relacion
 		[HttpPost("{courseId:int}/users/{userId:int}")]
 		public async Task<ActionResult> AddUser(int courseId, int userId)
 		{
@@ -108,6 +107,13 @@ namespace Courses_API.Controllers
 			if (userFound is null)
 			{
 				return NotFound();
+			}
+
+			bool userCourseExist = await _contextDb.UsersCourses.AnyAsync(x => x.UserId == userId && x.CourseId == courseId);
+
+			if (userCourseExist)
+			{
+				return BadRequest("El usuario ya se encuentra inscrito en el curso");
 			}
 
 			UserCourse course = new UserCourse
@@ -170,6 +176,20 @@ namespace Courses_API.Controllers
 		{
 			int registersDeleted = await _contextDb.Courses.Where(course => course.Id == id)
 														   .ExecuteDeleteAsync();
+
+			if (registersDeleted == 0)
+			{
+				return NotFound();
+			}
+
+			return NoContent();
+		}
+
+		[HttpDelete("{courseId:int}/users/{userId:int}")]
+		public async Task<ActionResult> DeleteUser(int courseId, int userId)
+		{
+			int registersDeleted = await _contextDb.UsersCourses.Where(userCourse => userCourse.UserId == userId && userCourse.CourseId == courseId)
+																.ExecuteDeleteAsync();
 
 			if (registersDeleted == 0)
 			{
