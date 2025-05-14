@@ -1,4 +1,4 @@
-# Courses-API
+# Courses-API (Documentación)
 
 ## Tabla de Contenido
 
@@ -22,6 +22,13 @@
     - [2.3 Crear un detalle a un usuario](#23-crear-un-detalle-a-un-usuario)
     - [2.4 Actualizar un detalle de un usuario](#24-actualizar-un-detalle-de-un-usuario)
     - [2.5 Eliminar un detalle de un usuario](#25-eliminar-un-detalle-de-un-usuario)
+  - [3. Course](#3-course)
+    - [3.1 Obtener todos los cursos](#31-obtener-todos-los-cursos)
+    - [3.2 Obtener curso por id](#31-obtener-curso-por-id)
+    - [3.3 Obtener curso por id con usuarios inscritos](#33-obtener-curso-por-id-con-usuarios-inscritos)
+    - [3.4 Crear un curso](#34-crear-un-curso)
+    - [3.5 Inscribir usuario a curso](#35-inscribir-usuario-a-curso)
+    - [3.6 Actualizar un curso](#36-actualizar-un-curso)
 
 ## Introducción
 
@@ -55,7 +62,7 @@ entidades del modelo de datos:
 - Detail (Detalle)
 - Course (Curso)
 - Lesson (Lección)
-- Registration (Inscripción)
+- UsersCourses (Tabla de unión)
 
 ### Explicación
 
@@ -68,7 +75,7 @@ entidades del modelo de datos:
 - **User N:N Course (Relación de muchos a muchos):** Un usuario puede estar relacionado a uno o
   más cursos, y de la misma manera un curso puede estar relacionado a uno o más usuarios. Esta relación
   de muchos a muchos requiere de una tabla intermediaria que se encargue de alojar las multiples relaciones,
-  esta la tabla es Registration o en español Inscripción.
+  esta tabla es UsersCourses.
 
 ## ¿Cómo levantar el proyecto?
 
@@ -239,7 +246,7 @@ de la petición HTTP que va a indicar los cambios que deseamos hacer sobre una e
 ]
 ```
 
-Como puede observar el servicio requiere un de arreglo donde especifiquemos los cambios en las propiedades que se deeen realizar modificaciones, por lo tanto
+Como puede observar el servicio requiere un de arreglo donde especifiquemos los cambios en las propiedades que se deseen realizar modificaciones, por lo tanto
 no es necesario especificar todos los atributos de la entidad.
 
 ```
@@ -280,7 +287,9 @@ Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolve
 
 - **Endpoint**
 
+```
 GET https://localhost:7081/api/details
+```
 
 - **Respuesta exitosa (Ejemplo) 200 Ok**
 
@@ -396,7 +405,7 @@ de la petición HTTP que va a indicar los cambios que deseamos hacer sobre una e
 ]
 ```
 
-Como puede observar el servicio requiere un de arreglo donde especifiquemos los cambios en las propiedades que se deeen realizar modificaciones, por lo tanto
+Como puede observar el servicio requiere un de arreglo donde especifiquemos los cambios en las propiedades que se deseen realizar modificaciones, por lo tanto
 no es necesario especificar todos los atributos de la entidad.
 
 ```
@@ -433,3 +442,299 @@ DELETE https://localhost:7081/api/details/{detailId}
 - **Respuesta exitosa (Ejemplo) 204 No Content**
 
 Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
+
+### 3. Course
+
+#### 3.1 Obtener todos los cursos
+
+- **Endpoint**
+
+GET https://localhost:7081/api/courses
+
+- **Respuesta exitosa (Ejemplo) 200 Ok**
+
+```json
+[
+  {
+    "id": 1,
+    "code": "dbe45d44-9726-4657-9307-4986aa5ca512",
+    "name": "Java",
+    "description": "Fundamentos de POO",
+    "lessons": [
+      {
+        "id": 1,
+        "name": "Sintaxis básica Java",
+        "instructorName": "Nicolas Sosa",
+        "hours": 10,
+        "courseCode": "dbe45d44-9726-4657-9307-4986aa5ca512"
+      },
+      {
+        "id": 2,
+        "name": "Programación POO",
+        "instructorName": "Angie Zárate",
+        "hours": 40,
+        "courseCode": "dbe45d44-9726-4657-9307-4986aa5ca512"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "code": "58f13487-e49f-4fcb-bdce-13a06c6fd40e",
+    "name": "JavaScript",
+    "description": "Sintaxis básica JavaScript",
+    "lessons": []
+  }
+]
+```
+
+| Atributo              | Tipo   | Descripción                                              |
+| --------------------- | ------ | -------------------------------------------------------- |
+| id                    | number | Identificador único del curso                            |
+| code                  | guid   | Código en formato GUID                                   |
+| name                  | text   | Nombre de curso                                          |
+| description           | text   | Descripción del curso                                    |
+| lessons               | array  | Arreglo que contiene las lecciones que componen el curso |
+| lesson.id             | number | Identificador único de la lección                        |
+| lesson.name           | text   | Nombre de la lección                                     |
+| lesson.instructorName | text   | Nombre del instructor de la lección                      |
+| lesson.hours          | number | Número de horas de la lección                            |
+| lesson.courseCode     | guid   | Código del curso asociado a la lección                   |
+
+#### 3.2 Obtener curso por id
+
+- **Endpoint**
+
+```
+GET https://localhost:7081/api/courses/{courseId}
+```
+
+- **Path Params**
+
+| Parámetro | Tipo   | Descripción                   | Obligatorio |
+| --------- | ------ | ----------------------------- | ----------- |
+| courseId  | number | Identificador único del curso | Si          |
+
+- **Respuesta exitosa (Ejemplo) 200 Ok**
+
+```json
+{
+  "id": 1,
+  "code": "dbe45d44-9726-4657-9307-4986aa5ca512",
+  "name": "Java",
+  "description": "Fundamentos de POO",
+  "lessons": [
+    {
+      "id": 1,
+      "name": "Sintaxis básica Java",
+      "instructorName": "Nicolas Sosa",
+      "hours": 10,
+      "courseCode": "dbe45d44-9726-4657-9307-4986aa5ca512"
+    }
+  ]
+}
+```
+
+| Atributo              | Tipo   | Descripción                                              |
+| --------------------- | ------ | -------------------------------------------------------- |
+| id                    | number | Identificador único del curso                            |
+| code                  | guid   | Código en formato GUID                                   |
+| name                  | text   | Nombre de curso                                          |
+| description           | text   | Descripción del curso                                    |
+| lessons               | array  | Arreglo que contiene las lecciones que componen el curso |
+| lesson.id             | number | Identificador único de la lección                        |
+| lesson.name           | text   | Nombre de la lección                                     |
+| lesson.instructorName | text   | Nombre del instructor de la lección                      |
+| lesson.hours          | number | Número de horas de la lección                            |
+| lesson.courseCode     | guid   | Código del curso asociado a la lección                   |
+
+#### 3.3 Obtener curso por id con usuarios inscritos
+
+- **Endpoint**
+
+```
+GET https://localhost:7081/api/courses/{courseId}/users
+```
+
+- **Path Params**
+
+| Parámetro | Tipo   | Descripción                   | Obligatorio |
+| --------- | ------ | ----------------------------- | ----------- |
+| courseId  | number | Identificador único del curso | Si          |
+
+- **Respuesta exitosa (Ejemplo) 200 Ok**
+
+```json
+{
+  "id": 1,
+  "code": "dbe45d44-9726-4657-9307-4986aa5ca512",
+  "name": "Java",
+  "description": "Fundamentos de POO",
+  "users": [
+    {
+      "id": 1,
+      "userName": "narto",
+      "fullName": "Santiago Jimenez",
+      "detail": {
+        "id": 4,
+        "email": "nicosan12@hotmail.com",
+        "address": "Calle 100 b 30-34",
+        "birthdate": "2000-02-18"
+      }
+    },
+    {
+      "id": 2,
+      "userName": "nicosan",
+      "fullName": "Nicolas Sosa",
+      "detail": null
+    }
+  ]
+}
+```
+
+| Atributo               | Tipo   | Descripción                                 |
+| ---------------------- | ------ | ------------------------------------------- |
+| id                     | number | Identificador único del curso               |
+| code                   | guid   | Código en formato GUID                      |
+| name                   | text   | Nombre de curso                             |
+| description            | text   | Descripción del curso                       |
+| users                  | array  | Arreglo de usuarios inscritos en el curso   |
+| users.id               | number | Identificador único del usuario             |
+| users.userName         | text   | Nombre de usuario                           |
+| users.fullName         | text   | Nombre completo del usuario                 |
+| users.detail           | object | Objeto del detalle del usuario              |
+| users.detail.id        | number | Identificador único del detalle del usuario |
+| users.detail.email     | text   | Dirreción de correo electrónico             |
+| users.detail.address   | text   | Dirreción física                            |
+| users.detail.birthdate | date   | Fecha de nacimiento en formato `yyyy-mm-dd` |
+
+#### 3.4 Crear un curso
+
+- **Endpoint**
+
+```
+POST https://localhost:7081/api/courses
+```
+
+- **Request Body**
+
+```json
+{
+  "name": "Curso de Futbol",
+  "description": "Curso básico de futbol"
+}
+```
+
+| Parámetro   | Tipo | Descripción           | Obligatorio |
+| ----------- | ---- | --------------------- | ----------- |
+| name        | text | Nombre del curso      | Si          |
+| description | text | Descripción del curso | No          |
+
+- **Respuesta exitosa (Ejemplo) 201 Created**
+
+```json
+{
+  "id": 9,
+  "code": "21aecbd8-c0e5-4f8a-8154-0e50ac3d1262",
+  "name": "Curso de Futbol",
+  "description": "Curso básico de futbol",
+  "lessons": []
+}
+```
+
+| Atributo    | Tipo   | Descripción                                                                                |
+| ----------- | ------ | ------------------------------------------------------------------------------------------ |
+| id          | number | Identificador único del curso                                                              |
+| code        | guid   | Código del curso                                                                           |
+| name        | text   | Nombre del curso                                                                           |
+| description | text   | Descripción del curso                                                                      |
+| lessons     | array  | Lecciones del curso (Esta propiedad siempre está vacía, ya que se acaba de crear el curso) |
+
+#### 3.5 Inscribir usuario a curso
+
+- **Endpoint**
+
+```
+POST https://localhost:7081/api/courses/{courseId}/{userId}
+```
+
+- **Path Params**
+
+| Parámetro | Tipo   | Descripción                                                        | Obligatorio |
+| --------- | ------ | ------------------------------------------------------------------ | ----------- |
+| courseId  | number | Identificador único del curso al que se desea inscribir un usuario | Si          |
+| userId    | number | Identificador único del usuario al que se desea inscribir al curso | Si          |
+
+- **Respuesta exitosa (Ejemplo) 201 Created**
+
+```json
+{
+  "id": 9,
+  "code": "Curso de Futbol",
+  "name": "Curso de Futbol",
+  "description": "Curso básico de futbol",
+  "users": [
+    {
+      "id": 1,
+      "userName": "narto",
+      "fullName": "Santiago Jimenez",
+      "detail": {
+        "id": 4,
+        "email": "nicosan12@hotmail.com",
+        "address": "Calle 100 b 30-34",
+        "birthdate": "2000-02-18"
+      }
+    }
+  ]
+}
+```
+
+| Atributo               | Tipo   | Descripción                                 |
+| ---------------------- | ------ | ------------------------------------------- |
+| id                     | number | Identificador único del curso               |
+| code                   | guid   | Código en formato GUID                      |
+| name                   | text   | Nombre de curso                             |
+| description            | text   | Descripción del curso                       |
+| users                  | array  | Arreglo de usuarios inscritos en el curso   |
+| users.id               | number | Identificador único del usuario             |
+| users.userName         | text   | Nombre de usuario                           |
+| users.fullName         | text   | Nombre completo del usuario                 |
+| users.detail           | object | Objeto del detalle del usuario              |
+| users.detail.id        | number | Identificador único del detalle del usuario |
+| users.detail.email     | text   | Dirreción de correo electrónico             |
+| users.detail.address   | text   | Dirreción física                            |
+| users.detail.birthdate | date   | Fecha de nacimiento en formato `yyyy-mm-dd` |
+
+#### 3.6 Actualizar un curso
+
+Este servicio utiliza el estandar **RFC 6902** o también conocido como JSON Patch, que basicamente nos indica cómo debe ser la estructura del cuerpo
+de la petición HTTP que va a indicar los cambios que deseamos hacer sobre una entidad, ejemplo:
+
+```json
+[
+  { "op": "replace", "path": "/lastname", "value": "Gomez" },
+  { "op": "replace", "path": "/name", "value": "Duvan" }
+]
+```
+
+Como puede observar el servicio requiere un de arreglo donde especifiquemos los cambios en las propiedades que se deseen realizar modificaciones, por lo tanto
+no es necesario especificar todos los atributos de la entidad.
+
+```
+PATCH https://localhost:7081/api/courses/{courseId}
+```
+
+- **Request Body**
+
+```json
+[
+  {
+    "op": "replace",
+    "path": "/description",
+    "value": "Curso avanzado de futbol"
+  }
+]
+```
+
+- **Respuesta exitosa (Ejemplo) 204 No Content**
+
+Cuando la moficiación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.

@@ -87,7 +87,7 @@ namespace Courses_API.Controllers
 
 			CourseDto courseDto = _mapper.Map<CourseDto>(course);
 
-			return CreatedAtRoute("ObtenerCurso", new { id = course.Id}, courseDto);
+			return CreatedAtRoute("ObtenerCurso", new { id = course.Id }, courseDto);
 		}
 
 		[HttpPost("{courseId:int}/users/{userId:int}")]
@@ -102,6 +102,7 @@ namespace Courses_API.Controllers
 			}
 
 			User? userFound = await _contextDb.Users
+								  .Include(x => x.Detail)
 								  .FirstOrDefaultAsync(x => x.Id == userId);
 
 			if (userFound is null)
@@ -125,6 +126,12 @@ namespace Courses_API.Controllers
 			_contextDb.UsersCourses.Add(course);
 			await _contextDb.SaveChangesAsync();
 
+			DetailDto? userDetail = null;
+			if (userFound.Detail is not null)
+			{
+				userDetail = _mapper.Map<DetailDto>(userFound.Detail);
+			}
+
 			return CreatedAtRoute("ObtenerCursoConUsuarios", new { id = courseId }, new CourseWithUsersDto
 			{
 				Id = courseFound.Id,
@@ -135,7 +142,7 @@ namespace Courses_API.Controllers
 					Id = userFound.Id,
 					FullName = $"{userFound.Name} {userFound.Lastname}",
 					UserName = userFound.UserName!,
-					Detail = null
+					Detail = userDetail
 				}]
 			});
 		}
