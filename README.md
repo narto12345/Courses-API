@@ -31,6 +31,10 @@
     - [3.6 Actualizar un curso](#36-actualizar-un-curso)
     - [3.7 Eliminar un curso](#37-eliminar-un-curso)
     - [3.8 Eliminar inscrición de un usuario en un curso](#38-eliminar-inscrición-de-un-usuario-en-un-curso)
+  - [4. Lesson](#4-lesson)
+    - [4.1 Obtener todas las lecciones](#41-obtener-todas-las-lecciones)
+    - [4.2 Obtener lección por id](#42-obtener-lección-por-id)
+    - [4.3 Crear una lección a un curso](#43-crear-una-lección-a-un-curso)
 
 ## Introducción
 
@@ -451,7 +455,9 @@ Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolve
 
 - **Endpoint**
 
+```
 GET https://localhost:7081/api/courses
+```
 
 - **Respuesta exitosa (Ejemplo) 200 Ok**
 
@@ -772,8 +778,134 @@ DELETE https://localhost:7081/api/courses/{courseId}/users/{userId}
 | Parámetro | Tipo   | Descripción                                          | Obligatorio |
 | --------- | ------ | ---------------------------------------------------- | ----------- |
 | courseId  | number | Identificador único del curso                        | Si          |
-| courseId  | number | Identificador único del usuario inscrito en el curso | Si          |
+| userId    | number | Identificador único del usuario inscrito en el curso | Si          |
 
 - **Respuesta exitosa (Ejemplo) 204 No Content**
 
 Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
+
+### 4. Lesson
+
+#### 4.1 Obtener todas las lecciones
+
+- **Endpoint**
+
+```
+GET https://localhost:7081/api/lessons
+```
+
+- **Respuesta exitosa (Ejemplo) 200 Ok**
+
+```json
+[
+  {
+    "id": 1,
+    "name": "Sintaxis básica Java",
+    "instructorName": "Nicolas Sosa",
+    "hours": 10,
+    "courseCode": "dbe45d44-9726-4657-9307-4986aa5ca512"
+  },
+  {
+    "id": 2,
+    "name": "Programación POO",
+    "instructorName": "Angie Zárate",
+    "hours": 40,
+    "courseCode": "dbe45d44-9726-4657-9307-4986aa5ca512"
+  },
+  {
+    "id": 3,
+    "name": "Java Swing",
+    "instructorName": "Duvan Vargas",
+    "hours": 120,
+    "courseCode": "dbe45d44-9726-4657-9307-4986aa5ca512"
+  }
+]
+```
+
+| Atributo       | Tipo   | Descripción                                    |
+| -------------- | ------ | ---------------------------------------------- |
+| id             | number | Identificador único de la lección              |
+| name           | text   | Nombre de la lección                           |
+| instructorName | text   | Nombre de instructor que imparte la lección    |
+| hours          | number | Horas que compone la lección                   |
+| courseCode     | guid   | Código del curso del que hace parte la lección |
+
+#### 4.2 Obtener lección por id
+
+- **Endpoint**
+
+```
+GET https://localhost:7081/api/courses/{lessonId}
+```
+
+- **Path Params**
+
+| Parámetro | Tipo   | Descripción                       | Obligatorio |
+| --------- | ------ | --------------------------------- | ----------- |
+| lessonId  | number | Identificador único de la lección | Si          |
+
+- **Respuesta exitosa (Ejemplo) 200 Ok**
+
+```json
+{
+  "id": 1,
+  "name": "Sintaxis básica Java",
+  "instructorName": "Nicolas Sosa",
+  "hours": 10,
+  "courseCode": "dbe45d44-9726-4657-9307-4986aa5ca512"
+}
+```
+
+| Atributo       | Tipo   | Descripción                                    |
+| -------------- | ------ | ---------------------------------------------- |
+| id             | number | Identificador único de la lección              |
+| name           | text   | Nombre de la lección                           |
+| instructorName | text   | Nombre de instructor que imparte la lección    |
+| hours          | number | Horas que compone la lección                   |
+| courseCode     | guid   | Código del curso del que hace parte la lección |
+
+#### 4.3 Crear una lección a un curso
+
+- **Endpoint**
+
+```
+POST https://localhost:7081/api/lessons
+```
+
+- **Request Body**
+
+```json
+{
+  "name": "ciencias de halo",
+  "instructorName": "Jefe",
+  "hours": 3,
+  "courseId": 1
+}
+```
+
+| Parámetro      | Tipo   | Descripción                                      | Obligatorio |
+| -------------- | ------ | ------------------------------------------------ | ----------- |
+| name           | text   | Nombre de la lección                             | Si          |
+| instructorName | text   | Nombre de instructor que imparte la lección      | Si          |
+| hours          | number | Número de horas que compone la lección           | Si          |
+| courseId       | number | Id único del curso al que se agregará la lección | Si          |
+
+- **Respuesta exitosa (Ejemplo) 201 Created**
+
+```json
+{
+  "id": 15,
+  "name": "ciencias de halo",
+  "instructorName": "Jefe",
+  "hours": 3,
+  "courseCode": "dbe45d44-9726-4657-9307-4986aa5ca512"
+}
+```
+
+| Atributo       | Tipo   | Descripción                                    |
+| -------------- | ------ | ---------------------------------------------- |
+| id             | number | Identificador único de la lección              |
+| name           | text   | Nombre de la lección                           |
+| instructorName | text   | Nombre de instructor que imparte la lección    |
+| hours          | number | Horas que compone la lección                   |
+| courseCode     | guid   | Código del curso del que hace parte la lección |
