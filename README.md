@@ -24,7 +24,7 @@
     - [2.5 Eliminar un detalle de un usuario](#25-eliminar-un-detalle-de-un-usuario)
   - [3. Course](#3-course)
     - [3.1 Obtener todos los cursos](#31-obtener-todos-los-cursos)
-    - [3.2 Obtener curso por id](#31-obtener-curso-por-id)
+    - [3.2 Obtener curso por id](#32-obtener-curso-por-id)
     - [3.3 Obtener curso por id con usuarios inscritos](#33-obtener-curso-por-id-con-usuarios-inscritos)
     - [3.4 Crear un curso](#34-crear-un-curso)
     - [3.5 Inscribir usuario a curso](#35-inscribir-usuario-a-curso)
