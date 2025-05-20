@@ -29,6 +29,8 @@
     - [3.4 Crear un curso](#34-crear-un-curso)
     - [3.5 Inscribir usuario a curso](#35-inscribir-usuario-a-curso)
     - [3.6 Actualizar un curso](#36-actualizar-un-curso)
+    - [3.7 Eliminar un curso](#37-eliminar-un-curso)
+    - [3.8 Eliminar inscrición de un usuario en un curso](#38-eliminar-inscrición-de-un-usuario-en-un-curso)
 
 ## Introducción
 
@@ -738,3 +740,40 @@ PATCH https://localhost:7081/api/courses/{courseId}
 - **Respuesta exitosa (Ejemplo) 204 No Content**
 
 Cuando la moficiación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
+
+#### 3.7 Eliminar un curso
+
+- **Endpoint**
+
+```
+DELETE https://localhost:7081/api/courses/{courseId}
+```
+
+- **Path Params**
+
+| Parámetro | Tipo   | Descripción                   | Obligatorio |
+| --------- | ------ | ----------------------------- | ----------- |
+| courseId  | number | Identificador único del curso | Si          |
+
+- **Respuesta exitosa (Ejemplo) 204 No Content**
+
+Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
+
+#### 3.8 Eliminar inscrición de un usuario en un curso
+
+- **Endpoint**
+
+```
+DELETE https://localhost:7081/api/courses/{courseId}/users/{userId}
+```
+
+- **Path Params**
+
+| Parámetro | Tipo   | Descripción                                          | Obligatorio |
+| --------- | ------ | ---------------------------------------------------- | ----------- |
+| courseId  | number | Identificador único del curso                        | Si          |
+| courseId  | number | Identificador único del usuario inscrito en el curso | Si          |
+
+- **Respuesta exitosa (Ejemplo) 204 No Content**
+
+Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
