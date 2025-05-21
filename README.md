@@ -100,7 +100,7 @@ entidades del modelo de datos:
 Los siguiente comandos son utilizados para realizar una migración Code First, que consiste en que a partir de un modelo de datos representado por clases de C#,
 se construyan las tablas en el motor de bases de datos configurado:
 
-Nota: Estos comandos aplican unicamente para la Package Manager Console de Visual Studio.
+Nota: Estos comandos aplican únicamente para la Package Manager Console de Visual Studio.
 
 - **Crear migración**
 
