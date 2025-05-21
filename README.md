@@ -35,6 +35,8 @@
     - [4.1 Obtener todas las lecciones](#41-obtener-todas-las-lecciones)
     - [4.2 Obtener lección por id](#42-obtener-lección-por-id)
     - [4.3 Crear una lección a un curso](#43-crear-una-lección-a-un-curso)
+    - [4.4 Actualizar una lección](#44-actualizar-una-lección)
+    - [4.5 Eliminar una lección](#45-eliminar-una-lección)
 
 ## Introducción
 
@@ -267,7 +269,7 @@ PATCH https://localhost:7081/api/users{userId}
 
 - **Respuesta exitosa (Ejemplo) 204 No Content**
 
-Cuando la moficiación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
+Cuando la moficiación se haya ejecutado satifactoriamente el sistema no devolverá un cuerpo, si no que solamente un estado 204 No Content.
 
 #### 1.5 Eliminar usuario
 
@@ -285,7 +287,7 @@ DELETE https://localhost:7081/api/users/{userId}
 
 - **Respuesta exitosa (Ejemplo) 204 No Content**
 
-Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
+Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolverá un cuerpo, si no que solamente un estado 204 No Content.
 
 ### 2. Detail
 
@@ -429,7 +431,7 @@ PATCH https://localhost:7081/api/details/{detailId}
 
 - **Respuesta exitosa (Ejemplo) 204 No Content**
 
-Cuando la moficiación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
+Cuando la moficiación se haya ejecutado satifactoriamente el sistema no devolverá un cuerpo, si no que solamente un estado 204 No Content.
 
 #### 2.5 Eliminar un detalle de un usuario
 
@@ -447,7 +449,7 @@ DELETE https://localhost:7081/api/details/{detailId}
 
 - **Respuesta exitosa (Ejemplo) 204 No Content**
 
-Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
+Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolverá un cuerpo, si no que solamente un estado 204 No Content.
 
 ### 3. Course
 
@@ -745,7 +747,7 @@ PATCH https://localhost:7081/api/courses/{courseId}
 
 - **Respuesta exitosa (Ejemplo) 204 No Content**
 
-Cuando la moficiación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
+Cuando la moficiación se haya ejecutado satifactoriamente el sistema no devolverá un cuerpo, si no que solamente un estado 204 No Content.
 
 #### 3.7 Eliminar un curso
 
@@ -763,7 +765,7 @@ DELETE https://localhost:7081/api/courses/{courseId}
 
 - **Respuesta exitosa (Ejemplo) 204 No Content**
 
-Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
+Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolverá un cuerpo, si no que solamente un estado 204 No Content.
 
 #### 3.8 Eliminar inscrición de un usuario en un curso
 
@@ -782,7 +784,7 @@ DELETE https://localhost:7081/api/courses/{courseId}/users/{userId}
 
 - **Respuesta exitosa (Ejemplo) 204 No Content**
 
-Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
+Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolverá un cuerpo, si no que solamente un estado 204 No Content.
 
 ### 4. Lesson
 
@@ -909,3 +911,51 @@ POST https://localhost:7081/api/lessons
 | instructorName | text   | Nombre de instructor que imparte la lección    |
 | hours          | number | Horas que compone la lección                   |
 | courseCode     | guid   | Código del curso del que hace parte la lección |
+
+#### 4.4 Actualizar una lección
+
+Este servicio utiliza el estandar **RFC 6902** o también conocido como JSON Patch, que basicamente nos indica cómo debe ser la estructura del cuerpo
+de la petición HTTP que va a indicar los cambios que deseamos hacer sobre una entidad, ejemplo:
+
+```json
+[
+  { "op": "replace", "path": "/lastname", "value": "Gomez" },
+  { "op": "replace", "path": "/name", "value": "Duvan" }
+]
+```
+
+Como puede observar el servicio requiere un de arreglo donde especifiquemos los cambios en las propiedades que se deseen realizar modificaciones, por lo tanto
+no es necesario especificar todos los atributos de la entidad.
+
+```
+PATCH https://localhost:7081/api/lessons/{lessonId}
+```
+
+```json
+[
+  { "op": "replace", "path": "/name", "value": "Sintaxis básica Java 8" },
+  { "op": "replace", "path": "/instructorName", "value": "Santaigo Jimenez" }
+]
+```
+
+- **Respuesta exitosa (Ejemplo) 204 No Content**
+
+Cuando la moficiación se haya ejecutado satifactoriamente el sistema no devolverá un cuerpo, si no que solamente un estado 204 No Content.
+
+#### 4.5 Eliminar una lección
+
+- **Endpoint**
+
+```
+DELETE https://localhost:7081/api/lessons/{lessonId}
+```
+
+- **Path Params**
+
+| Parámetro | Tipo   | Descripción                       | Obligatorio |
+| --------- | ------ | --------------------------------- | ----------- |
+| lessonId  | number | Identificador único de la lección | Si          |
+
+- **Respuesta exitosa (Ejemplo) 204 No Content**
+
+Cuando la eliminación se haya ejecutado satifactoriamente el sistema no devolvera un cuerpo, si no que solamente un estado 204 No Content.
