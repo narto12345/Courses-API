@@ -104,6 +104,60 @@ Abra SQL Server Management Studio e inicie sesión en su instancia local:
 
 ![Tutorial-levantar-1](./Public/1.png)
 
+Seleccionamos “New Query”:
+
+![Tutorial-levantar-2](./Public/2.png)
+
+El aplicativo deberá abrir un archivo de texto.
+
+Ejecute el siguiente script para crear la base de datos requerida:
+
+```
+CREATE DATABASE CoursesApiDb;
+```
+
+![Tutorial-levantar-3](./Public/3.png)
+
+Deberá apreciar un mensaje de éxito que indica que la creación de la base de datos se realizó correctamente.
+
+![Tutorial-levantar-4](./Public/4.png)
+
+**Nota: Antes de continuar asegúrese de tener instalado ASP.NET en su Visual Studio:**
+
+![Tutorial-levantar-5](./Public/5.png)
+
+### 2. Clonar código fuente del proyecto
+
+Abra una interfaz de línea de comandos (CLI) y ubíquese en el directorio en que desea clonar el código fuente del proyecto:
+
+Ejecute el siguiente comando para clonar el proyecto:
+
+```
+git clone https://github.com/narto12345/Courses-API.git
+```
+
+Git descargará los archivos fuentes del proyecto, y deberá poder visualizar lo siguiente en su gestor de archivos:
+
+![Tutorial-levantar-6](./Public/6.png)
+
+A continuación, abra el archivo “Courses-API.sln” que abrirá automáticamente la solución del proyecto en Visual Studio:
+
+![Tutorial-levantar-7](./Public/7.png)
+
+### 3. Configurar credenciales de la base de datos
+
+Abra el archivo “appsettings.Development.json” y configure los datos de acuerdo con su instancia local de la base de datos SQL Server:
+
+![Tutorial-levantar-8](./Public/8.png)
+
+![Tutorial-levantar-9](./Public/9.png)
+
+### 4. Migrar modelo de datos
+
+Abra la Package Manager Console de Visual Studio:
+
+![Tutorial-levantar-10](./Public/10.png)
+
 ### Migración de base de datos
 
 Los siguiente comandos son utilizados para realizar una migración Code First, que consiste en que a partir de un modelo de datos representado por clases de C#,
@@ -122,6 +176,22 @@ Add-Migration **Nombre de la migración**
 ```
 Update-Database
 ```
+
+Una vez se haya efectuado la migración, compile la solución:
+
+![Tutorial-levantar-11](./Public/11.png)
+
+Ejecute el aplicativo:
+
+![Tutorial-levantar-12](./Public/12.png)
+
+Cuando el sistema abra una consola similar a la siguiente, el aplicativo se encontrará encendido y en pleno funcionamiento en modo desarrollo:
+
+![Tutorial-levantar-13](./Public/13.png)
+
+Ahora que el API se encuentra arriba, podrá probar los diversos servicios web que expone.
+
+En el directorio raíz de este proyecto encontrará un archivo llamado “Courses-API.postman_collection.json” el cual representa una colección de POSTMAN con todos endpoints mapeados, y de igual importancia en el README.md encontrará una documentación detallada del cómo usar cada uno de los servicios.
 
 ## Servicos Web
 
