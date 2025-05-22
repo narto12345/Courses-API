@@ -89,11 +89,20 @@ entidades del modelo de datos:
 
 ### Requisitos
 
+- Git
 - .Net 8
 - ASP.NET Core 8
 - Contar con una instancia local de un servidor de base de datos Microsft SQL Server
 - Un Administrador para la base de datos de SQL Server (Esto es opcional, pero esta herramienta facilita el manejo de la base da datos, para esta explicación se usará Microsoft SQL Server Management Studio)
 - Visual Studio o Visual Studio Code (Para esta explicación se usará Visual Studio)
+
+### 1. Crear base de datos
+
+Siga los siguientes pasos para crear la base de datos en un instancia local con la ayuda de SQL Server Management Studio:
+
+Abra SQL Server Management Studio e inicie sesión en su instancia local:
+
+![Tutorial-levantar-1](./Public/1.png)
 
 ### Migración de base de datos
 
