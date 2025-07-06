@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Courses_API.Dtos;
 using Courses_API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ namespace Courses_API.Controllers
 
 	[ApiController]
 	[Route("/api/lessons")]
+	[Authorize]
 	public class LessonController : ControllerBase
 	{
 		private readonly ApplicationDbContext _contextDb;
@@ -21,6 +23,7 @@ namespace Courses_API.Controllers
 		}
 
 		[HttpGet]
+		[AllowAnonymous]
 		public async Task<List<LessonDto>> Get()
 		{
 			List<Lesson> lessonsFound = await _contextDb.Lessons
@@ -30,6 +33,7 @@ namespace Courses_API.Controllers
 			return lessonsDto;
 		}
 
+		[AllowAnonymous]
 		[HttpGet("{id:int}", Name = "ObtenerLeccionDeCurso")]
 		public async Task<ActionResult> Get(int id)
 		{

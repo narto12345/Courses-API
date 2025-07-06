@@ -1,25 +1,135 @@
 ﻿using AutoMapper;
 using Courses_API.Dtos;
 using Courses_API.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace Courses_API.Controllers
 {
 
 	[ApiController]
 	[Route("/api/users")]
+	[Authorize]
 	public class UserController : ControllerBase
 	{
 		private readonly ApplicationDbContext _contextDb;
+		private readonly UserManager<IdentityUser> _userManager;
 		private readonly IMapper _mapper;
-		public UserController(ApplicationDbContext applicationDbContext, IMapper mapper)
+		private readonly IConfiguration _configuration;
+		private readonly SignInManager<IdentityUser> _signInManager;
+
+		public UserController(
+			ApplicationDbContext applicationDbContext,
+			IMapper mapper,
+			UserManager<IdentityUser> userManager,
+			IConfiguration configuration,
+			SignInManager<IdentityUser> signInManager)
 		{
+			_userManager = userManager;
 			_contextDb = applicationDbContext;
 			_mapper = mapper;
+			_configuration = configuration;
+			_signInManager = signInManager;
 		}
 
+		[HttpPost("register")]
+		[AllowAnonymous]
+		public async Task<ActionResult<AuthenticationResponseDto>> Register(UserCredentialDto userCredentialDto)
+		{
+			IdentityUser user = new()
+			{
+				UserName = userCredentialDto.Email,
+				Email = userCredentialDto.Email
+			};
+
+			IdentityResult result = await _userManager.CreateAsync(user, userCredentialDto.Password!);
+
+			if (result.Succeeded)
+			{
+				AuthenticationResponseDto response = await BuildToken(userCredentialDto);
+				return response;
+			}
+			else
+			{
+				foreach (var error in result.Errors)
+				{
+					ModelState.AddModelError(string.Empty, error.Description);
+				}
+
+				return ValidationProblem();
+			}
+		}
+
+		[HttpPost("login")]
+		[AllowAnonymous]
+		public async Task<ActionResult<AuthenticationResponseDto>> Login(UserCredentialDto userCredentialDto)
+		{
+			IdentityUser? user = await _userManager.FindByEmailAsync(userCredentialDto.Email);
+
+			if (user is null)
+			{
+				return ReturnIncorrectLogin();
+			}
+
+			Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, userCredentialDto.Password!, false);
+		
+			if (result.Succeeded)
+			{
+				return await BuildToken(userCredentialDto);
+			}
+			else
+			{
+				return ReturnIncorrectLogin();
+			}
+		}
+
+		private ActionResult ReturnIncorrectLogin()
+		{
+			ModelState.AddModelError(string.Empty, "Login incorrecto");
+			return ValidationProblem();
+		}
+
+		private async Task<AuthenticationResponseDto> BuildToken(UserCredentialDto userCredentialDto)
+		{
+			List<Claim> claims = new List<Claim>
+			{
+				new Claim("email", userCredentialDto.Email)
+			};
+
+			IdentityUser? user = await _userManager.FindByEmailAsync(userCredentialDto.Email);
+			IList<Claim> claimsDB = await _userManager.GetClaimsAsync(user!);
+
+			claims.AddRange(claimsDB);
+
+			SymmetricSecurityKey secret = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["jwtkey"]!));
+			SigningCredentials credentials = new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
+
+			DateTime expiration = DateTime.UtcNow.AddYears(1);
+
+			JwtSecurityToken securityToken = new JwtSecurityToken(
+				issuer: null,
+				audience: null,
+				claims: claims,
+				expires: expiration,
+				signingCredentials: credentials);
+
+			string token = new JwtSecurityTokenHandler().WriteToken(securityToken);
+
+			return new AuthenticationResponseDto
+			{
+				Token = token,
+				Expiration = expiration,
+			};
+		}
+
+		[AllowAnonymous]
 		[HttpGet]
 		public async Task<IEnumerable<UserDto>> Get()
 		{
@@ -31,6 +141,7 @@ namespace Courses_API.Controllers
 			return usersDto;
 		}
 
+		[AllowAnonymous]
 		[HttpGet("{id:int}", Name = "ObtenerUsuario")]
 		public async Task<ActionResult> Get(int id)
 		{

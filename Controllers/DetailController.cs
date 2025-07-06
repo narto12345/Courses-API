@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Courses_API.Dtos;
 using Courses_API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ namespace Courses_API.Controllers
 
 	[ApiController]
 	[Route("/api/details")]
+	[Authorize]
 	public class DetailController : ControllerBase
 	{
 		private readonly ApplicationDbContext _contextDb;
@@ -21,6 +23,7 @@ namespace Courses_API.Controllers
 		}
 
 		[HttpGet]
+		[AllowAnonymous]
 		public async Task<List<DetailDto>> Get()
 		{
 			List<Detail> detailsFoud = await _contextDb.Details.ToListAsync();
@@ -29,6 +32,7 @@ namespace Courses_API.Controllers
 		}
 
 		[HttpGet("{id:int}", Name = "ObtenerDetalleDeUsuario")]
+		[AllowAnonymous]
 		public async Task<ActionResult> Get(int id)
 		{
 			Detail? detailFound = await _contextDb.Details.FirstOrDefaultAsync(x => x.Id == id);
