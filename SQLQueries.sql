@@ -39,3 +39,6 @@ SELECT * FROM UsersCourses;
 /*INSERT INTO UsersCourses(UserId, CourseId) VALUES
 											(3,1),
 											(1,7);*/
+
+SELECT * FROM AspNetUsers;
+SELECT * FROM AspNetRoles;
