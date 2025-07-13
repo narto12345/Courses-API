@@ -8,6 +8,8 @@ namespace Courses_API.Dtos
 		public required string UserName { get; set; }
 		[Required]
 		public required string Name { get; set; }
+		[Required]
+		public required string? Password { get; set; }
 
 		public string? Lastname { get; set; }
 	}

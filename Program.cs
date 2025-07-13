@@ -1,4 +1,5 @@
 using Courses_API.Models;
+using Courses_API.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -11,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddControllers().AddNewtonsoftJson();
+
+builder.Services.AddTransient<IUserService, UserService>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 		options.UseSqlServer("name=DefaultConnection"));

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Courses_API.Dtos;
 using Courses_API.Models;
+using Courses_API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.JsonPatch;
@@ -21,6 +22,7 @@ namespace Courses_API.Controllers
 	{
 		private readonly ApplicationDbContext _contextDb;
 		private readonly UserManager<IdentityUser> _userManager;
+		private readonly IUserService _userService;
 		private readonly IMapper _mapper;
 		private readonly IConfiguration _configuration;
 		private readonly SignInManager<IdentityUser> _signInManager;
@@ -30,30 +32,44 @@ namespace Courses_API.Controllers
 			IMapper mapper,
 			UserManager<IdentityUser> userManager,
 			IConfiguration configuration,
-			SignInManager<IdentityUser> signInManager)
+			SignInManager<IdentityUser> signInManager,
+			IUserService userService)
 		{
 			_userManager = userManager;
 			_contextDb = applicationDbContext;
 			_mapper = mapper;
 			_configuration = configuration;
 			_signInManager = signInManager;
+			_userService = userService;
 		}
 
 		[HttpPost("register")]
 		[AllowAnonymous]
-		public async Task<ActionResult<AuthenticationResponseDto>> Register(UserCredentialDto userCredentialDto)
+		public async Task<ActionResult<AuthenticationResponseDto>> Register(UserRequestDto userRequestDto)
 		{
 			IdentityUser user = new()
 			{
-				UserName = userCredentialDto.Email,
-				Email = userCredentialDto.Email
+				UserName = userRequestDto.UserName,
+				Email = userRequestDto.UserName
 			};
 
-			IdentityResult result = await _userManager.CreateAsync(user, userCredentialDto.Password!);
+			IdentityResult result = await _userManager.CreateAsync(user, userRequestDto.Password!);
 
 			if (result.Succeeded)
 			{
-				AuthenticationResponseDto response = await BuildToken(userCredentialDto);
+				AuthenticationResponseDto response = await BuildToken(userRequestDto);
+
+				User userOrigin = new()
+				{
+					UserName = userRequestDto.UserName,
+					Name = userRequestDto.Name,
+					Lastname = userRequestDto.Lastname,
+					UserIdentityId = user.Id
+				};
+
+				_contextDb.Add(userOrigin);
+				await _contextDb.SaveChangesAsync();
+
 				return response;
 			}
 			else
@@ -79,10 +95,17 @@ namespace Courses_API.Controllers
 			}
 
 			Microsoft.AspNetCore.Identity.SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, userCredentialDto.Password!, false);
-		
+
+			UserRequestDto userRequestDto = new()
+			{
+				Name = userCredentialDto.Email,
+				UserName = userCredentialDto.Email,
+				Password = null
+			};
+
 			if (result.Succeeded)
 			{
-				return await BuildToken(userCredentialDto);
+				return await BuildToken(userRequestDto);
 			}
 			else
 			{
@@ -96,14 +119,14 @@ namespace Courses_API.Controllers
 			return ValidationProblem();
 		}
 
-		private async Task<AuthenticationResponseDto> BuildToken(UserCredentialDto userCredentialDto)
+		private async Task<AuthenticationResponseDto> BuildToken(UserRequestDto userCredentialDto)
 		{
 			List<Claim> claims = new List<Claim>
 			{
-				new Claim("email", userCredentialDto.Email)
+				new Claim("email", userCredentialDto.UserName)
 			};
 
-			IdentityUser? user = await _userManager.FindByEmailAsync(userCredentialDto.Email);
+			IdentityUser? user = await _userManager.FindByEmailAsync(userCredentialDto.UserName);
 			IList<Claim> claimsDB = await _userManager.GetClaimsAsync(user!);
 
 			claims.AddRange(claimsDB);
@@ -159,18 +182,18 @@ namespace Courses_API.Controllers
 			return Ok(userDto);
 		}
 
-		[HttpPost]
-		public async Task<ActionResult> Post([FromBody] UserRequestDto userRequestDto)
-		{
-			User user = _mapper.Map<User>(userRequestDto);
+		//[HttpPost]
+		//public async Task<ActionResult> Post([FromBody] UserRequestDto userRequestDto)
+		//{
+		//	User user = _mapper.Map<User>(userRequestDto);
 
-			_contextDb.Add(user);
-			await _contextDb.SaveChangesAsync();
+		//	_contextDb.Add(user);
+		//	await _contextDb.SaveChangesAsync();
 
-			UserDto userDto = _mapper.Map<UserDto>(user);
+		//	UserDto userDto = _mapper.Map<UserDto>(user);
 
-			return CreatedAtRoute("ObtenerUsuario", new { id = user.Id }, userDto);
-		}
+		//	return CreatedAtRoute("ObtenerUsuario", new { id = user.Id }, userDto);
+		//}
 
 		[HttpPatch("{id:int}")]
 		public async Task<ActionResult> Patch(int id, JsonPatchDocument<UserPatchDto> patchDocument)

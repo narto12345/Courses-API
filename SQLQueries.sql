@@ -41,4 +41,7 @@ SELECT * FROM UsersCourses;
 											(1,7);*/
 
 SELECT * FROM AspNetUsers;
+
+/*DELETE FROM AspNetUsers;*/
+
 SELECT * FROM AspNetRoles;

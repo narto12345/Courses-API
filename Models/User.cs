@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace Courses_API.Models
 {
@@ -12,5 +13,7 @@ namespace Courses_API.Models
 		public string? Lastname { get; set; }
 		public Detail? Detail { get; set; }
 		public List<UserCourse> Courses { get; set; } = [];
+		public required string UserIdentityId { get; set; }
+		public IdentityUser? UserIdentity { get; set; }
 	}
 }
