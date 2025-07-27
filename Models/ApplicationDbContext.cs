@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Courses_API.Models
 {
-	public class ApplicationDbContext : IdentityDbContext
+	public class ApplicationDbContext : IdentityDbContext<UserAsp>
 	{
 		public ApplicationDbContext(DbContextOptions options) : base(options)
 		{

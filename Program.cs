@@ -18,12 +18,12 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 		options.UseSqlServer("name=DefaultConnection"));
 
-builder.Services.AddIdentityCore<IdentityUser>()
+builder.Services.AddIdentityCore<UserAsp>()
 	.AddEntityFrameworkStores<ApplicationDbContext>()
 	.AddDefaultTokenProviders();
 
-builder.Services.AddScoped<UserManager<IdentityUser>>();
-builder.Services.AddScoped<SignInManager<IdentityUser>>();
+builder.Services.AddScoped<UserManager<UserAsp>>();
+builder.Services.AddScoped<SignInManager<UserAsp>>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthentication().AddJwtBearer(options =>
@@ -38,6 +38,11 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
 		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["jwtkey"]!)),
 		ClockSkew = TimeSpan.Zero
 	};
+});
+
+builder.Services.AddAuthorization(option =>
+{
+	option.AddPolicy("isadmin", policy => policy.RequireClaim("isadmin"));
 });
 
 var app = builder.Build();

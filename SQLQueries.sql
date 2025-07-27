@@ -45,3 +45,5 @@ SELECT * FROM AspNetUsers;
 /*DELETE FROM AspNetUsers;*/
 
 SELECT * FROM AspNetRoles;
+
+SELECT * FROM AspNetUserClaims;

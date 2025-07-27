@@ -10,7 +10,6 @@ namespace Courses_API.Controllers
 {
 	[ApiController]
 	[Route("/api/courses")]
-	[Authorize]
 	public class CourseController : ControllerBase
 	{
 		private readonly ApplicationDbContext _contextDb;
@@ -22,7 +21,6 @@ namespace Courses_API.Controllers
 		}
 
 		[HttpGet]
-		[AllowAnonymous]
 		public async Task<IEnumerable<CourseDto>> Get()
 		{
 			List<Course> courses = await _contextDb.Courses
@@ -33,7 +31,6 @@ namespace Courses_API.Controllers
 			return coursesDto;
 		}
 
-		[AllowAnonymous]
 		[HttpGet("{id:int}", Name = "ObtenerCurso")]
 		public async Task<ActionResult> Get(int id)
 		{
@@ -51,7 +48,6 @@ namespace Courses_API.Controllers
 			return Ok(courseDto);
 		}
 
-		[AllowAnonymous]
 		[HttpGet("{id:int}/users", Name = "ObtenerCursoConUsuarios")]
 		public async Task<ActionResult> GetCourseWithUsers(int id)
 		{
@@ -81,6 +77,7 @@ namespace Courses_API.Controllers
 		}
 
 		[HttpPost]
+		[Authorize]
 		public async Task<ActionResult> Post([FromBody] CourseRequestDto courseRequestDto)
 		{
 			Course course = _mapper.Map<Course>(courseRequestDto);
@@ -96,6 +93,7 @@ namespace Courses_API.Controllers
 		}
 
 		[HttpPost("{courseId:int}/users/{userId:int}")]
+		[Authorize]
 		public async Task<ActionResult> AddUser(int courseId, int userId)
 		{
 			Course? courseFound = await _contextDb.Courses
@@ -153,6 +151,7 @@ namespace Courses_API.Controllers
 		}
 
 		[HttpPatch("{id:int}")]
+		[Authorize]
 		public async Task<ActionResult> Patch(int id, JsonPatchDocument<CoursePathDto> patchDocument)
 		{
 			if (patchDocument is null)
@@ -184,6 +183,7 @@ namespace Courses_API.Controllers
 		}
 
 		[HttpDelete("{id:int}")]
+		[Authorize(Policy = "isadmin")]
 		public async Task<ActionResult> Delete(int id)
 		{
 			int registersDeleted = await _contextDb.Courses.Where(course => course.Id == id)

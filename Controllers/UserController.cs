@@ -21,18 +21,18 @@ namespace Courses_API.Controllers
 	public class UserController : ControllerBase
 	{
 		private readonly ApplicationDbContext _contextDb;
-		private readonly UserManager<IdentityUser> _userManager;
+		private readonly UserManager<UserAsp> _userManager;
 		private readonly IUserService _userService;
 		private readonly IMapper _mapper;
 		private readonly IConfiguration _configuration;
-		private readonly SignInManager<IdentityUser> _signInManager;
+		private readonly SignInManager<UserAsp> _signInManager;
 
 		public UserController(
 			ApplicationDbContext applicationDbContext,
 			IMapper mapper,
-			UserManager<IdentityUser> userManager,
+			UserManager<UserAsp> userManager,
 			IConfiguration configuration,
-			SignInManager<IdentityUser> signInManager,
+			SignInManager<UserAsp> signInManager,
 			IUserService userService)
 		{
 			_userManager = userManager;
@@ -47,7 +47,7 @@ namespace Courses_API.Controllers
 		[AllowAnonymous]
 		public async Task<ActionResult<AuthenticationResponseDto>> Register(UserRequestDto userRequestDto)
 		{
-			IdentityUser user = new()
+			UserAsp user = new()
 			{
 				UserName = userRequestDto.UserName,
 				Email = userRequestDto.UserName
@@ -66,7 +66,7 @@ namespace Courses_API.Controllers
 					Lastname = userRequestDto.Lastname,
 					UserIdentityId = user.Id
 				};
-
+				
 				_contextDb.Add(userOrigin);
 				await _contextDb.SaveChangesAsync();
 
@@ -87,7 +87,7 @@ namespace Courses_API.Controllers
 		[AllowAnonymous]
 		public async Task<ActionResult<AuthenticationResponseDto>> Login(UserCredentialDto userCredentialDto)
 		{
-			IdentityUser? user = await _userManager.FindByEmailAsync(userCredentialDto.Email);
+			UserAsp? user = await _userManager.FindByEmailAsync(userCredentialDto.Email);
 
 			if (user is null)
 			{
@@ -113,6 +113,43 @@ namespace Courses_API.Controllers
 			}
 		}
 
+		[HttpGet("refresh-token")]
+		public async Task<ActionResult<AuthenticationResponseDto>> RefreshToken()
+		{
+			UserAsp? user = await _userService.GetUser();
+
+			if (user is null)
+			{
+				return NotFound();
+			}
+
+			UserRequestDto userRequest = new UserRequestDto()
+			{
+				Name = default!,
+				UserName = user.Email!,
+				Password = null!
+			};
+
+			AuthenticationResponseDto authenticationResponseDto = await BuildToken(userRequest);
+			return authenticationResponseDto;
+		}
+
+		[HttpGet("make-admin/{email}")]
+
+		public async Task<ActionResult> MakeAdmin(string email)
+		{
+			UserAsp? user = await _userManager.FindByEmailAsync(email);
+
+			if (user is null)
+			{
+				return NotFound();
+			}
+
+			await _userManager.AddClaimAsync(user, new Claim("isadmin", "true"));
+
+			return NoContent();
+		}
+
 		private ActionResult ReturnIncorrectLogin()
 		{
 			ModelState.AddModelError(string.Empty, "Login incorrecto");
@@ -126,7 +163,7 @@ namespace Courses_API.Controllers
 				new Claim("email", userCredentialDto.UserName)
 			};
 
-			IdentityUser? user = await _userManager.FindByEmailAsync(userCredentialDto.UserName);
+			UserAsp? user = await _userManager.FindByEmailAsync(userCredentialDto.UserName);
 			IList<Claim> claimsDB = await _userManager.GetClaimsAsync(user!);
 
 			claims.AddRange(claimsDB);
@@ -151,6 +188,7 @@ namespace Courses_API.Controllers
 				Expiration = expiration,
 			};
 		}
+
 
 		[AllowAnonymous]
 		[HttpGet]
@@ -221,6 +259,22 @@ namespace Courses_API.Controllers
 
 			_mapper.Map(userPatchDtoDb, userFound);
 			await _contextDb.SaveChangesAsync();
+			return NoContent();
+		}
+
+		[HttpPut]
+		public async Task<ActionResult> PutBirthday(UserBirthdateRequestDto request)
+		{
+			UserAsp? user = await _userService.GetUser();
+
+			if (user is null)
+			{
+				return NotFound();
+			}
+
+			user.Birthday = request.BirthDate;
+
+			await _userManager.UpdateAsync(user);
 			return NoContent();
 		}
 

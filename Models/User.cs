@@ -14,6 +14,6 @@ namespace Courses_API.Models
 		public Detail? Detail { get; set; }
 		public List<UserCourse> Courses { get; set; } = [];
 		public required string UserIdentityId { get; set; }
-		public IdentityUser? UserIdentity { get; set; }
+		public UserAsp? UserIdentity { get; set; }
 	}
 }
