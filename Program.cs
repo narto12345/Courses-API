@@ -15,7 +15,8 @@ builder.Services.AddCors(options =>
 {
 	options.AddDefaultPolicy(corsOptions =>
 	{
-		corsOptions.WithOrigins(allowOrigins!).AllowAnyMethod().AllowAnyHeader();
+		corsOptions.WithOrigins(allowOrigins!).AllowAnyMethod().AllowAnyHeader()
+		.WithExposedHeaders("my-header");
 	});
 });
 
@@ -56,6 +57,12 @@ builder.Services.AddAuthorization(option =>
 });
 
 var app = builder.Build();
+
+app.Use(async (context, next) =>
+{
+	context.Response.Headers.Append("my-header", "value");
+	await next();
+});
 
 app.UseCors();
 
