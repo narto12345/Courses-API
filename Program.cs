@@ -9,6 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+string[]? allowOrigins = builder.Configuration.GetSection("allowOrigins").Get<string[]>();
+
+builder.Services.AddCors(options =>
+{
+	options.AddDefaultPolicy(corsOptions =>
+	{
+		corsOptions.WithOrigins(allowOrigins!).AllowAnyMethod().AllowAnyHeader();
+	});
+});
+
 builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddControllers().AddNewtonsoftJson();
@@ -46,6 +56,8 @@ builder.Services.AddAuthorization(option =>
 });
 
 var app = builder.Build();
+
+app.UseCors();
 
 app.MapControllers();
 
