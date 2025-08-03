@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.DataProtection;
+﻿using Courses_API.Dtos;
+using Courses_API.Services;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -9,11 +11,31 @@ namespace Courses_API.Controllers
 	{
 		private IDataProtector _protector;
 		private ITimeLimitedDataProtector _timeLimitProtector;
+		private IHashService _hashService;
 
-		public SecurityController(IDataProtectionProvider dataProtectionProvider)
+		public SecurityController(IDataProtectionProvider dataProtectionProvider, IHashService hashService)
 		{
 			_protector = dataProtectionProvider.CreateProtector("SecurityController");
 			_timeLimitProtector = _protector.ToTimeLimitedDataProtector();
+			_hashService = hashService;
+		}
+
+		[HttpGet("hash")]
+		public ActionResult Hash(string plainText)
+		{
+			HashResultDto hash1 = _hashService.Hash(plainText);
+			HashResultDto hash2 = _hashService.Hash(plainText);
+			HashResultDto hash3 = _hashService.Hash(plainText, hash2.Sal);
+			HashResultDto hash4 = _hashService.Hash(plainText,
+			[
+				12, 212, 34, 65, 34, 32, 56
+			]);
+			HashResultDto hash5 = _hashService.Hash(plainText,
+			[
+				12, 212, 34, 65, 34, 32, 56
+			]);
+
+			return Ok(new { hash1, hash2, hash3, hash4, hash5 });
 		}
 
 		[HttpGet("encrypt")]

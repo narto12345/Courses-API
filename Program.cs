@@ -27,6 +27,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllers().AddNewtonsoftJson();
 
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IHashService, HashService>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 		options.UseSqlServer("name=DefaultConnection"));
