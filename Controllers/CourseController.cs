@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace Courses_API.Controllers
 {
@@ -21,6 +22,8 @@ namespace Courses_API.Controllers
 		}
 
 		[HttpGet]
+		[EndpointSummary("1.1 Obtiene todos los cursos")]
+		[EndpointDescription("Obtiene todos los cursos disponibles del sistema")]
 		public async Task<IEnumerable<CourseDto>> Get()
 		{
 			List<Course> courses = await _contextDb.Courses
@@ -32,7 +35,12 @@ namespace Courses_API.Controllers
 		}
 
 		[HttpGet("{id:int}", Name = "ObtenerCurso")]
-		public async Task<ActionResult> Get(int id)
+		[EndpointSummary("1.2 Obtiene un curso por Id")]
+		[EndpointDescription("Obtiene un curso filtrado por un Id único")]
+		[AllowAnonymous]
+		[ProducesResponseType<CourseDto>(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		public async Task<ActionResult<CourseDto>> Get([Description("El id del curso")] int id)
 		{
 			Course? courseFound = await _contextDb.Courses
 										.Include(include => include.Lessons)
@@ -49,6 +57,7 @@ namespace Courses_API.Controllers
 		}
 
 		[HttpGet("{id:int}/users", Name = "ObtenerCursoConUsuarios")]
+		[AllowAnonymous]
 		public async Task<ActionResult> GetCourseWithUsers(int id)
 		{
 			Course? courseFound = await _contextDb.Courses
