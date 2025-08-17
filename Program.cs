@@ -100,7 +100,10 @@ builder.Services.AddSwaggerGen(options =>
 	//});
 });
 
-builder.Services.AddTransient<IFileStorage, FileStorageAzure>();
+//builder.Services.AddTransient<IFileStorage, FileStorageAzure>();
+builder.Services.AddTransient<IFileStorage, FileStorageLocal>();
+
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -112,6 +115,8 @@ app.Use(async (context, next) =>
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseStaticFiles();
 
 app.UseCors();
 
