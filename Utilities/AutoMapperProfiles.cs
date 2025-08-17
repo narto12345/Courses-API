@@ -21,6 +21,11 @@ namespace Courses_API.Utilities
 			CreateMap<Course, CourseDto>();
 			CreateMap<CourseRequestDto, Course>();
 			CreateMap<Course, CoursePathDto>().ReverseMap();
+			CreateMap<CourseRequestWithPhotoDto, Course>()
+				.ForMember(ent => ent.Foto, config =>
+				{
+					config.Ignore();
+				});
 
 			CreateMap<Lesson, LessonDto>()
 				.ForMember(dto => dto.CourseCode,

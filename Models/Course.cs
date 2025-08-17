@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Courses_API.Models
 {
@@ -12,5 +13,7 @@ namespace Courses_API.Models
 		public string? Description { get; set; }
 		public List<Lesson>? Lessons { get; set; }
 		public List<UserCourse> Users { get; set; } = [];
+		[Unicode(false)]
+		public string? Foto { get; set; }
 	}
 }

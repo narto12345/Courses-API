@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using Courses_API.Dtos;
 using Courses_API.Models;
+using Courses_API.Services;
 using Courses_API.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.ComponentModel;
 
 namespace Courses_API.Controllers
@@ -16,10 +18,13 @@ namespace Courses_API.Controllers
 	{
 		private readonly ApplicationDbContext _contextDb;
 		private readonly IMapper _mapper;
-		public CourseController(ApplicationDbContext applicationDbContext, IMapper mapper)
+		private readonly IFileStorage _fileStorage;
+		private const string container = "courses";
+		public CourseController(ApplicationDbContext applicationDbContext, IMapper mapper, IFileStorage fileStorage)
 		{
 			_contextDb = applicationDbContext;
 			_mapper = mapper;
+			_fileStorage = fileStorage;
 		}
 
 		[HttpGet]
@@ -95,6 +100,28 @@ namespace Courses_API.Controllers
 		public async Task<ActionResult> Post([FromBody] CourseRequestDto courseRequestDto)
 		{
 			Course course = _mapper.Map<Course>(courseRequestDto);
+
+			course.Code = Guid.NewGuid().ToString();
+
+			_contextDb.Courses.Add(course);
+			await _contextDb.SaveChangesAsync();
+
+			CourseDto courseDto = _mapper.Map<CourseDto>(course);
+
+			return CreatedAtRoute("ObtenerCurso", new { id = course.Id }, courseDto);
+		}
+
+		[HttpPost("storage")]
+		[Authorize]
+		public async Task<ActionResult> PostWithFile([FromForm] CourseRequestWithPhotoDto courseRequestDto)
+		{
+			Course course = _mapper.Map<Course>(courseRequestDto);
+
+			if (courseRequestDto.Photo is not null)
+			{
+				string url = await _fileStorage.Store(container, courseRequestDto.Photo);
+				course.Foto = url;
+			}
 
 			course.Code = Guid.NewGuid().ToString();
 
@@ -200,13 +227,16 @@ namespace Courses_API.Controllers
 		[Authorize(Policy = "isadmin")]
 		public async Task<ActionResult> Delete(int id)
 		{
-			int registersDeleted = await _contextDb.Courses.Where(course => course.Id == id)
-														   .ExecuteDeleteAsync();
+			Course? course = await _contextDb.Courses.FirstOrDefaultAsync(x => x.Id == id);
 
-			if (registersDeleted == 0)
+			if (course is null)
 			{
 				return NotFound();
 			}
+
+			_contextDb.Remove(course);
+			await _contextDb.SaveChangesAsync();
+			await _fileStorage.Delete(course.Foto, container);
 
 			return NoContent();
 		}
