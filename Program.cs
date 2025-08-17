@@ -100,6 +100,8 @@ builder.Services.AddSwaggerGen(options =>
 	//});
 });
 
+builder.Services.AddTransient<IFileStorage, FileStorageAzure>();
+
 var app = builder.Build();
 
 app.Use(async (context, next) =>
