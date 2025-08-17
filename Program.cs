@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
 	options.AddDefaultPolicy(corsOptions =>
 	{
 		corsOptions.WithOrigins(allowOrigins!).AllowAnyMethod().AllowAnyHeader()
-		.WithExposedHeaders("my-header");
+		.WithExposedHeaders("total-records");
 	});
 });
 

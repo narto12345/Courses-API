@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Courses_API.Dtos;
 using Courses_API.Models;
+using Courses_API.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -24,9 +25,13 @@ namespace Courses_API.Controllers
 		[HttpGet]
 		[EndpointSummary("1.1 Obtiene todos los cursos")]
 		[EndpointDescription("Obtiene todos los cursos disponibles del sistema")]
-		public async Task<IEnumerable<CourseDto>> Get()
+		public async Task<IEnumerable<CourseDto>> Get([FromQuery] PaginationDto paginationDto)
 		{
-			List<Course> courses = await _contextDb.Courses
+			IQueryable<Course> queryable = _contextDb.Courses.AsQueryable();
+			await HttpContext.InsertPaginationParams(queryable);
+			List<Course> courses = await queryable
+											   .OrderBy(order =>  order.Id)
+											   .Page(paginationDto)
 											   .Include(include => include.Lessons)
 											   .ToListAsync();
 
