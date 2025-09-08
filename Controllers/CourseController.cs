@@ -35,7 +35,7 @@ namespace Courses_API.Controllers
 			IQueryable<Course> queryable = _contextDb.Courses.AsQueryable();
 			await HttpContext.InsertPaginationParams(queryable);
 			List<Course> courses = await queryable
-											   .OrderBy(order =>  order.Id)
+											   .OrderBy(order => order.Id)
 											   .Page(paginationDto)
 											   .Include(include => include.Lessons)
 											   .ToListAsync();
@@ -43,6 +43,66 @@ namespace Courses_API.Controllers
 			List<CourseDto> coursesDto = _mapper.Map<List<CourseDto>>(courses);
 			return coursesDto;
 		}
+
+		[HttpGet("Filter")]
+		[AllowAnonymous]
+		public async Task<ActionResult> Filter([FromQuery] CourseFilterDto paginationDto)
+		{
+			IQueryable<Course> queryable = _contextDb.Courses.AsQueryable();
+
+			if (!string.IsNullOrEmpty(paginationDto.Name))
+			{
+				queryable = queryable.Where(x => x.Name!.Contains(paginationDto.Name));
+			}
+
+			if (!string.IsNullOrEmpty(paginationDto.Description))
+			{
+				queryable = queryable.Where(x => x.Description!.Contains(paginationDto.Description));
+			}
+
+			if (paginationDto.IncludeLessons)
+			{
+				queryable = queryable.Include(x => x.Lessons);
+			}
+
+			if (paginationDto.IsFoto.HasValue)
+			{
+				if (paginationDto.IsFoto.Value)
+				{
+					queryable = queryable.Where(x => x.Foto != null);
+				}
+				else
+				{
+					queryable = queryable.Where(x => x.Foto == null);
+				}
+			}
+
+			if (paginationDto.IsLessons.HasValue)
+			{
+				if (paginationDto.IsLessons.Value)
+				{
+					queryable = queryable.Where(x => x.Lessons!.Any());
+				}
+				else
+				{
+					queryable = queryable.Where(x => !x.Lessons!.Any());
+				}
+			}
+
+			if (!string.IsNullOrEmpty(paginationDto.Lessons))
+			{
+				queryable = queryable.Where(x => x.Lessons!.Any(item => item.Name!.Contains(paginationDto.Lessons)));
+			}
+
+			List<Course> courses = await queryable
+											   .OrderBy(order => order.Id)
+											   .Page(paginationDto.PaginationDto)
+											   .ToListAsync();
+
+			List<CourseDto> coursesDto = _mapper.Map<List<CourseDto>>(courses);
+			return Ok(coursesDto);
+		}
+
 
 		[HttpGet("{id:int}", Name = "ObtenerCurso")]
 		[EndpointSummary("1.2 Obtiene un curso por Id")]

@@ -29,8 +29,8 @@ SELECT * FROM Lessons;
 														 ('Sintaxis básica Java', 'Nicolas Sosa', 10, 1),
 														 ('Programación POO', 'Angie Zárate', 40, 1),
 														 ('Java Swing', 'Duvan Vargas', 120, 1),
-														 ('Sintaxis básica C#', 'Sergio Blanco', 15, 7),
-														 ('Programación POO', 'Byron Vergara', 45, 7);*/
+														 ('Sintaxis básica C#', 'Sergio Blanco', 15, 1),
+														 ('Programación POO', 'Byron Vergara', 45, 1);*/
 
 SELECT * FROM UsersCourses;
 
