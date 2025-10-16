@@ -176,7 +176,7 @@ namespace Courses_API.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [AllowAnonymous]
         public async Task<ActionResult> Post([FromBody] CourseRequestDto courseRequestDto)
         {
             Course course = _mapper.Map<Course>(courseRequestDto);
@@ -304,7 +304,8 @@ namespace Courses_API.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        [Authorize(Policy = "isadmin")]
+        //[Authorize(Policy = "isadmin")]
+        [AllowAnonymous]
         public async Task<ActionResult> Delete(int id)
         {
             Course? course = await _contextDb.Courses.FirstOrDefaultAsync(x => x.Id == id);
@@ -314,8 +315,10 @@ namespace Courses_API.Controllers
                 return NotFound();
             }
 
-            _contextDb.Remove(course);
+            course.IsDeleted = true;
+
             await _contextDb.SaveChangesAsync();
+            _contextDb.Courses.Update(course);
             await _fileStorage.Delete(course.Foto, container);
 
             return NoContent();

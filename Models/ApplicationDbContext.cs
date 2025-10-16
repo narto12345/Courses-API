@@ -24,6 +24,8 @@ namespace Courses_API.Models
 				.HasForeignKey<Detail>(d => d.UserIdFk);
 
 			base.OnModelCreating(modelBuilder);
-		}
+
+			modelBuilder.Entity<Course>().HasQueryFilter(delete => !delete.IsDeleted);
+        }
 	}
 }
