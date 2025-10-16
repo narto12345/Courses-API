@@ -6,6 +6,7 @@ using Courses_API.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.Linq.Dynamic.Core;
@@ -32,6 +33,7 @@ namespace Courses_API.Controllers
         [HttpGet]
         [EndpointSummary("1.1 Obtiene todos los cursos")]
         [EndpointDescription("Obtiene todos los cursos disponibles del sistema")]
+        [OutputCache]
         public async Task<IEnumerable<CourseDto>> Get([FromQuery] PaginationDto paginationDto)
         {
             IQueryable<Course> queryable = _contextDb.Courses.AsQueryable();
@@ -130,6 +132,7 @@ namespace Courses_API.Controllers
         [AllowAnonymous]
         [ProducesResponseType<CourseDto>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [OutputCache]
         public async Task<ActionResult<CourseDto>> Get([Description("El id del curso")] int id)
         {
             Course? courseFound = await _contextDb.Courses
