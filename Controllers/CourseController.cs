@@ -38,6 +38,7 @@ namespace Courses_API.Controllers
         [EndpointSummary("1.1 Obtiene todos los cursos")]
         [EndpointDescription("Obtiene todos los cursos disponibles del sistema")]
         [OutputCache(Tags = [cache])]
+        [ServiceFilter<ActionFilter>()]
         public async Task<IEnumerable<CourseDto>> Get([FromQuery] PaginationDto paginationDto)
         {
             IQueryable<Course> queryable = _contextDb.Courses.AsQueryable();
