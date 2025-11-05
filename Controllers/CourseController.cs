@@ -21,19 +21,23 @@ namespace Courses_API.Controllers
         private readonly IMapper _mapper;
         private readonly IFileStorage _fileStorage;
         private readonly ILogger<CourseController> _logger;
+        private readonly IOutputCacheStore _outputCacheStore;
         private const string container = "courses";
-        public CourseController(ApplicationDbContext applicationDbContext, IMapper mapper, IFileStorage fileStorage, ILogger<CourseController> logger)
+
+        private const string cache = "get-courses";
+        public CourseController(ApplicationDbContext applicationDbContext, IMapper mapper, IFileStorage fileStorage, ILogger<CourseController> logger, IOutputCacheStore outputCacheStore)
         {
             _contextDb = applicationDbContext;
             _mapper = mapper;
             _fileStorage = fileStorage;
             _logger = logger;
+            _outputCacheStore = outputCacheStore;
         }
 
         [HttpGet]
         [EndpointSummary("1.1 Obtiene todos los cursos")]
         [EndpointDescription("Obtiene todos los cursos disponibles del sistema")]
-        [OutputCache]
+        [OutputCache(Tags = [cache])]
         public async Task<IEnumerable<CourseDto>> Get([FromQuery] PaginationDto paginationDto)
         {
             IQueryable<Course> queryable = _contextDb.Courses.AsQueryable();
@@ -132,7 +136,7 @@ namespace Courses_API.Controllers
         [AllowAnonymous]
         [ProducesResponseType<CourseDto>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [OutputCache]
+        [OutputCache(Tags = [cache])]
         public async Task<ActionResult<CourseDto>> Get([Description("El id del curso")] int id)
         {
             Course? courseFound = await _contextDb.Courses
@@ -188,7 +192,7 @@ namespace Courses_API.Controllers
 
             _contextDb.Courses.Add(course);
             await _contextDb.SaveChangesAsync();
-
+            await _outputCacheStore.EvictByTagAsync(cache, default);
             CourseDto courseDto = _mapper.Map<CourseDto>(course);
 
             return CreatedAtRoute("ObtenerCurso", new { id = course.Id }, courseDto);
@@ -210,7 +214,7 @@ namespace Courses_API.Controllers
 
             _contextDb.Courses.Add(course);
             await _contextDb.SaveChangesAsync();
-
+            await _outputCacheStore.EvictByTagAsync(cache, default);
             CourseDto courseDto = _mapper.Map<CourseDto>(course);
 
             return CreatedAtRoute("ObtenerCurso", new { id = course.Id }, courseDto);
@@ -303,6 +307,7 @@ namespace Courses_API.Controllers
 
             _mapper.Map(coursePathDto, courseFound);
             await _contextDb.SaveChangesAsync();
+            await _outputCacheStore.EvictByTagAsync(cache, default);
             return NoContent();
         }
 
@@ -323,7 +328,7 @@ namespace Courses_API.Controllers
             await _contextDb.SaveChangesAsync();
             _contextDb.Courses.Update(course);
             await _fileStorage.Delete(course.Foto, container);
-
+            await _outputCacheStore.EvictByTagAsync(cache, default);
             return NoContent();
         }
 
@@ -332,12 +337,12 @@ namespace Courses_API.Controllers
         {
             int registersDeleted = await _contextDb.UsersCourses.Where(userCourse => userCourse.UserId == userId && userCourse.CourseId == courseId)
                                                                 .ExecuteDeleteAsync();
-
+            
             if (registersDeleted == 0)
             {
                 return NotFound();
             }
-
+            
             return NoContent();
         }
     }

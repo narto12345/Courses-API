@@ -13,8 +13,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOutputCache(opt =>
 {
-    opt.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(15);
+    opt.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(60);
 });
+
+//builder.Services.AddStackExchangeRedisOutputCache(options =>
+//{
+//    options.Configuration = builder.Configuration.GetConnectionString("redis");
+//});
 
 builder.Services.AddDataProtection();
 
