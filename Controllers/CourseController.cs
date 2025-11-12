@@ -38,7 +38,7 @@ namespace Courses_API.Controllers
         [HttpGet]
         [EndpointSummary("1.1 Obtiene todos los cursos")]
         [EndpointDescription("Obtiene todos los cursos disponibles del sistema")]
-        [OutputCache(Tags = [cache])]
+        //[OutputCache(Tags = [cache])]
         [ServiceFilter<ActionFilter>()]
         [HeaderAggregationFilter("action", "GetAllCourses")]
         public async Task<IEnumerable<CourseDto>> Get([FromQuery] PaginationDto paginationDto)
@@ -139,7 +139,7 @@ namespace Courses_API.Controllers
         [AllowAnonymous]
         [ProducesResponseType<CourseDto>(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [OutputCache(Tags = [cache])]
+        //[OutputCache(Tags = [cache])]
         public async Task<ActionResult<CourseDto>> Get([Description("El id del curso")] int id)
         {
             Course? courseFound = await _contextDb.Courses

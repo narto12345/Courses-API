@@ -37,7 +37,10 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddAutoMapper(typeof(Program));
 
-builder.Services.AddControllers().AddNewtonsoftJson();
+builder.Services.AddControllers(opt =>
+{
+    opt.Filters.Add<TimeGlobalFilter>();
+}).AddNewtonsoftJson();
 
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IHashService, HashService>();
