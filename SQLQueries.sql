@@ -47,3 +47,5 @@ SELECT * FROM AspNetUsers;
 SELECT * FROM AspNetRoles;
 
 SELECT * FROM AspNetUserClaims;
+
+SELECT * FROM Errors;

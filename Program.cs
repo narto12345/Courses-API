@@ -128,6 +128,25 @@ app.Use(async (context, next) =>
     await next();
 });
 
+app.UseExceptionHandler(handler => handler.Run(async context =>
+{
+    Exception? exception = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>()?.Error;
+    Guid id = Guid.NewGuid();
+    var error = new Error()
+    {
+        Id = id,
+        StackTrace = exception!.StackTrace!,
+        ErrorMessage = exception!.Message,
+        Date = DateTime.UtcNow
+    };
+
+    ApplicationDbContext dbContext = context.RequestServices.GetRequiredService<ApplicationDbContext>();
+
+    dbContext.Errors.Add(error);
+    await dbContext.SaveChangesAsync();
+    await context.Response.WriteAsJsonAsync(new { Id = id, Message = "Ocurrio un error" });
+}));
+
 app.UseSwagger();
 app.UseSwaggerUI();
 

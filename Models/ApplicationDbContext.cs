@@ -14,8 +14,9 @@ namespace Courses_API.Models
 		public DbSet<Course> Courses { get; set; }
 		public DbSet<Lesson> Lessons { get; set; }
 		public DbSet<UserCourse> UsersCourses { get; set; }
+		public DbSet<Error> Errors { get; set; }
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			// Configuración de la relación uno a uno
 			modelBuilder.Entity<User>()

@@ -43,6 +43,7 @@ namespace Courses_API.Controllers
         [HeaderAggregationFilter("action", "GetAllCourses")]
         public async Task<IEnumerable<CourseDto>> Get([FromQuery] PaginationDto paginationDto)
         {
+            //throw new Exception("Error de prueba para el filtro de acciones");
             IQueryable<Course> queryable = _contextDb.Courses.AsQueryable();
             await HttpContext.InsertPaginationParams(queryable);
             List<Course> courses = await queryable
@@ -52,6 +53,7 @@ namespace Courses_API.Controllers
                                                .ToListAsync();
 
             List<CourseDto> coursesDto = _mapper.Map<List<CourseDto>>(courses);
+
             return coursesDto;
         }
 
