@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Courses_API.Controllers
+namespace Courses_API.Controllers.V1
 {
 
 	[ApiController]
-	[Route("/api/lessons")]
+	[Route("/api/v1/lessons")]
 	[Authorize]
 	public class LessonController : ControllerBase
 	{

@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Courses_API.Controllers
+namespace Courses_API.Controllers.V1
 {
 
 	[ApiController]
-	[Route("/api/details")]
+	[Route("/api/v1/details")]
 	[Authorize]
 	public class DetailController : ControllerBase
 	{

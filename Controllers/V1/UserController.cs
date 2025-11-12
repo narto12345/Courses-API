@@ -12,11 +12,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Courses_API.Controllers
+namespace Courses_API.Controllers.V1
 {
 
 	[ApiController]
-	[Route("/api/users")]
+	[Route("/api/v1/users")]
 	[Authorize]
 	public class UserController : ControllerBase
 	{

@@ -11,10 +11,10 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 using System.Linq.Dynamic.Core;
 
-namespace Courses_API.Controllers
+namespace Courses_API.Controllers.V1
 {
     [ApiController]
-    [Route("/api/courses")]
+    [Route("/api/v1/courses")]
     [HeaderAggregationFilter("Controller", "CourseController")]
     public class CourseController : ControllerBase
     {
@@ -135,7 +135,7 @@ namespace Courses_API.Controllers
         }
 
 
-        [HttpGet("{id:int}", Name = "ObtenerCurso")]
+        [HttpGet("{id:int}", Name = "ObtenerCursoV1")]
         [EndpointSummary("1.2 Obtiene un curso por Id")]
         [EndpointDescription("Obtiene un curso filtrado por un Id único")]
         [AllowAnonymous]
@@ -158,7 +158,7 @@ namespace Courses_API.Controllers
             return Ok(courseDto);
         }
 
-        [HttpGet("{id:int}/users", Name = "ObtenerCursoConUsuarios")]
+        [HttpGet("{id:int}/users", Name = "ObtenerCursoConUsuariosV1")]
         [AllowAnonymous]
         public async Task<ActionResult> GetCourseWithUsers(int id)
         {
@@ -200,7 +200,7 @@ namespace Courses_API.Controllers
             await _outputCacheStore.EvictByTagAsync(cache, default);
             CourseDto courseDto = _mapper.Map<CourseDto>(course);
 
-            return CreatedAtRoute("ObtenerCurso", new { id = course.Id }, courseDto);
+            return CreatedAtRoute("ObtenerCursoV1", new { id = course.Id }, courseDto);
         }
 
         [HttpPost("storage")]
@@ -222,7 +222,7 @@ namespace Courses_API.Controllers
             await _outputCacheStore.EvictByTagAsync(cache, default);
             CourseDto courseDto = _mapper.Map<CourseDto>(course);
 
-            return CreatedAtRoute("ObtenerCurso", new { id = course.Id }, courseDto);
+            return CreatedAtRoute("ObtenerCursoV1", new { id = course.Id }, courseDto);
         }
 
         [HttpPost("{courseId:int}/users/{userId:int}")]
@@ -268,7 +268,7 @@ namespace Courses_API.Controllers
                 userDetail = _mapper.Map<DetailDto>(userFound.Detail);
             }
 
-            return CreatedAtRoute("ObtenerCursoConUsuarios", new { id = courseId }, new CourseWithUsersDto
+            return CreatedAtRoute("ObtenerCursoConUsuariosV1", new { id = courseId }, new CourseWithUsersDto
             {
                 Id = courseFound.Id,
                 Code = courseFound.Name!,

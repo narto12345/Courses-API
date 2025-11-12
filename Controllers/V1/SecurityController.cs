@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
-namespace Courses_API.Controllers
+namespace Courses_API.Controllers.V1
 {
-	[Route("api/security")]
+	[Route("api/v1/security")]
 	public class SecurityController : ControllerBase
 	{
 		private IDataProtector _protector;
