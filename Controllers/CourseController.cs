@@ -15,6 +15,7 @@ namespace Courses_API.Controllers
 {
     [ApiController]
     [Route("/api/courses")]
+    [HeaderAggregationFilter("Controller", "CourseController")]
     public class CourseController : ControllerBase
     {
         private readonly ApplicationDbContext _contextDb;
@@ -39,6 +40,7 @@ namespace Courses_API.Controllers
         [EndpointDescription("Obtiene todos los cursos disponibles del sistema")]
         [OutputCache(Tags = [cache])]
         [ServiceFilter<ActionFilter>()]
+        [HeaderAggregationFilter("action", "GetAllCourses")]
         public async Task<IEnumerable<CourseDto>> Get([FromQuery] PaginationDto paginationDto)
         {
             IQueryable<Course> queryable = _contextDb.Courses.AsQueryable();
@@ -338,12 +340,12 @@ namespace Courses_API.Controllers
         {
             int registersDeleted = await _contextDb.UsersCourses.Where(userCourse => userCourse.UserId == userId && userCourse.CourseId == courseId)
                                                                 .ExecuteDeleteAsync();
-            
+
             if (registersDeleted == 0)
             {
                 return NotFound();
             }
-            
+
             return NoContent();
         }
     }
