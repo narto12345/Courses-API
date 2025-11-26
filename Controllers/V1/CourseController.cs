@@ -35,7 +35,7 @@ namespace Courses_API.Controllers.V1
             _outputCacheStore = outputCacheStore;
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetAllCourses")]
         [EndpointSummary("1.1 Obtiene todos los cursos")]
         [EndpointDescription("Obtiene todos los cursos disponibles del sistema")]
         //[OutputCache(Tags = [cache])]
@@ -187,7 +187,7 @@ namespace Courses_API.Controllers.V1
             });
         }
 
-        [HttpPost]
+        [HttpPost(Name = "CreateCourse")]
         [AllowAnonymous]
         public async Task<ActionResult> Post([FromBody] CourseRequestDto courseRequestDto)
         {
