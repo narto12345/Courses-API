@@ -12,14 +12,17 @@ public class RootController : ControllerBase
     public IEnumerable<HateoasDataDto> Get()
     {
         ResourceDto response = new ResourceDto();
+
         response.Links.Add(new HateoasDataDto(
             Url: Url.Link("GetRootV1", null)!,
             Description: "Self",
             Method: "GET"));
+
         response.Links.Add(new HateoasDataDto(
             Url: Url.Link("GetAllCourses", null)!,
             Description: "Get all courses",
             Method: "GET"));
+
         response.Links.Add(new HateoasDataDto(
             Url: Url.Link("CreateCourse", null)!,
             Description: "Create a new course",
